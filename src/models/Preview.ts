@@ -1,4 +1,4 @@
-import { DataTypes, Model } from 'sequelize';
+import { DataTypes, Model, Sequelize } from 'sequelize';
 import sequelize from '../loaders/database';
 
 export default class Preview extends Model {
@@ -11,6 +11,8 @@ export default class Preview extends Model {
   public theme!: string;
   public warning!: string;
 
+  public createdAt!: Date;
+  public updatedAt!: Date;
   public static associations: {};
 }
 
@@ -40,6 +42,14 @@ Preview.init(
     warning: {
       type: DataTypes.STRING(10),
       allowNull: true,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      defaultValue: Sequelize.fn('now'),
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      defaultValue: Sequelize.fn('now'),
     },
   },
   {

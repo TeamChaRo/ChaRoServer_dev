@@ -217,6 +217,7 @@ Detail.init(
     modelName: 'Detail',
     tableName: 'detail',
     sequelize,
+    timestamps: false,
     freezeTableName: true,
     charset: 'utf8',
     collate: 'utf8_unicode_ci',
