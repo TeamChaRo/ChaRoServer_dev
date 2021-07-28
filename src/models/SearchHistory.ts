@@ -1,4 +1,4 @@
-import { DataTypes, Model } from 'sequelize';
+import { DataTypes, Model, Sequelize } from 'sequelize';
 import sequelize from '../loaders/database';
 
 export default class SearchHistory extends Model {
@@ -8,6 +8,8 @@ export default class SearchHistory extends Model {
   public latitude!: string;
   public longitude!: string;
 
+  public createdAt!: Date;
+  public updatedAt!: Date;
   public static associations: {};
 }
 
@@ -34,6 +36,14 @@ SearchHistory.init(
     longitude: {
       type: DataTypes.STRING(20),
       allowNull: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      defaultValue: Sequelize.fn('now'),
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      defaultValue: Sequelize.fn('now'),
     },
   },
   {
