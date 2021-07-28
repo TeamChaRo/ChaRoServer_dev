@@ -1,0 +1,60 @@
+import { DataTypes, Model } from 'sequelize';
+import sequelize from '../loaders/database';
+
+export default class User extends Model {
+  public Id!: string;
+  public password!: string;
+  public email!: string;
+
+  // 소셜 로그인 시, 아래 요소들에 대한 입력 받고 저장하면 된다.
+  public nickname!: string;
+  public profileImage!: string;
+  public marketingPush!: boolean;
+  public marketingEmail!: boolean;
+
+  public static associations: {};
+}
+
+User.init(
+  {
+    Id: {
+      type: DataTypes.STRING(20),
+      primaryKey: true,
+    },
+    password: {
+      type: DataTypes.STRING(100),
+      allowNull: true, // social 유저를 위해 null값 허용
+    },
+    email: {
+      type: DataTypes.STRING(45),
+      allowNull: false,
+    },
+    nickname: {
+      type: DataTypes.STRING(45),
+      allowNull: false,
+    },
+    profileImage: {
+      type: DataTypes.STRING(100),
+      defaultValue: '*',
+    },
+    marketingPush: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    marketingEmail: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+  },
+  {
+    modelName: 'User',
+    tableName: 'user',
+    sequelize,
+    freezeTableName: true,
+    timestamps: false,
+    charset: 'utf8',
+    collate: 'utf8_unicode_ci',
+  }
+);
