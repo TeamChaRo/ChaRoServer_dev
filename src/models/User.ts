@@ -1,5 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../loaders/database';
+import config from '../config/config';
 
 export default class User extends Model {
   public Id!: string;
@@ -35,7 +36,7 @@ User.init(
     },
     profileImage: {
       type: DataTypes.STRING(100),
-      defaultValue: '*',
+      defaultValue: config.defaultImage,
     },
     marketingPush: {
       type: DataTypes.BOOLEAN,
