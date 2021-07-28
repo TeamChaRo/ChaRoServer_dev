@@ -1,25 +1,25 @@
-import express = require("express");
-import { Request, Response, NextFunction } from "express";
-import logger from "morgan";
+import express = require('express');
+import { Request, Response, NextFunction } from 'express';
+import logger from 'morgan';
 
-import db from "./loaders/database";
+import connectDB from './loaders/connect';
 
 // connect with database
-db.connectDB();
+connectDB();
 
 const app = express();
 
-app.use(logger("dev"));
+app.use(logger('dev'));
 
 // error handler
 app.use(function (err: any, req: Request, res: Response, next: NextFunction) {
   // set locals, only providing error in development
   res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "production" ? err : {};
+  res.locals.error = req.app.get('env') === 'production' ? err : {};
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error");
+  res.render('error');
 });
 
 app
@@ -30,7 +30,7 @@ app
       ################################################
     `);
   })
-  .on("error", (err) => {
+  .on('error', (err) => {
     console.error(err);
     process.exit(1);
   });

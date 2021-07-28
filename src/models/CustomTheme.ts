@@ -8,7 +8,6 @@ export default class Custom extends Model {
 
   public static associations: {};
 }
-
 Custom.init(
   {
     Id: {

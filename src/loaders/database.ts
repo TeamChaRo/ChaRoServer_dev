@@ -1,5 +1,5 @@
-import { Sequelize } from "sequelize";
-import config from "../config/config";
+import { Sequelize } from 'sequelize';
+import config from '../config/config';
 
 export default new Sequelize(
   config.database as string,
@@ -8,7 +8,7 @@ export default new Sequelize(
   {
     host: config.host as string,
     port: parseInt(config.port) as number,
-    dialect: "mysql",
+    dialect: 'mysql',
     logging: true,
   }
 );
