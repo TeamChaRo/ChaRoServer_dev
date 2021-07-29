@@ -11,11 +11,11 @@ import Local from './Local';
 import CustomTheme from './CustomTheme';
 
 /* User - Preview(post) */
-User.hasMany(Preview, {
+User.hasMany(Detail, {
   foreignKey: 'UserId',
   sourceKey: 'Id',
 });
-Preview.belongsTo(User, { foreignKey: 'UserId', targetKey: 'Id' });
+Detail.belongsTo(User, { foreignKey: 'UserId', targetKey: 'Id' });
 
 /* Preview - Detail */
 Preview.hasOne(Detail, {
