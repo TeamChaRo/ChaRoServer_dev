@@ -7,10 +7,11 @@ import mapping from './mapping.json';
 export async function getLikeTrend(userId: string) {
   try {
     const query = `SELECT P.Id, P.title, P.image, P.region, P.theme, P.warning, 
-                    DATE_FORMAT(P.createdAt, '%Y-%m-%d') as date, count(isLike.PreviewId) as isFavorite
+                    DATE_FORMAT(P.createdAt, '%Y-%m-%d') as date, count(isLike.PreviewId) as isFavorite, count(countLike.PreviewId) as favoriteCount
                     FROM preview as P
+                    LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id)
                     LEFT OUTER JOIN likedPost as isLike ON(isLike.PreviewId = P.Id and isLike.UserId =:userId)
-                    GROUP BY P.Id`;
+                    GROUP BY P.Id ORDER BY favoriteCount`;
 
     const result = await db.sequelize.query(query, {
       type: QueryTypes.SELECT,
@@ -43,12 +44,13 @@ export async function getLikeTrend(userId: string) {
 export async function getLikeTheme(userId: string, theme: string) {
   try {
     const query = `SELECT P.Id, P.title, P.image, P.region, P.theme, P.warning, 
-                      DATE_FORMAT(P.createdAt, '%Y-%m-%d') as date, count(isLike.PreviewId) as isFavorite
+                      DATE_FORMAT(P.createdAt, '%Y-%m-%d') as date, count(isLike.PreviewId) as isFavorite, count(countLike.PreviewId) as favoriteCount
                       FROM preview as P
                       INNER JOIN detail 
+                      LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id)
                       LEFT OUTER JOIN likedPost as isLike ON(isLike.PreviewId = P.Id and isLike.UserId =:userId)
                       WHERE detail.PostId=P.Id and detail.${theme}= 1
-                      GROUP BY P.Id`;
+                      GROUP BY P.Id ORDER BY favoriteCount`;
 
     const result = await db.sequelize.query(query, {
       type: QueryTypes.SELECT,
@@ -81,12 +83,13 @@ export async function getLikeTheme(userId: string, theme: string) {
 export async function getLikeLocal(userId: string, local: string) {
   try {
     const query = `SELECT P.Id, P.title, P.image, P.region, P.theme, P.warning, 
-                        DATE_FORMAT(P.createdAt, '%Y-%m-%d') as date, count(isLike.PreviewId) as isFavorite
+                        DATE_FORMAT(P.createdAt, '%Y-%m-%d') as date, count(isLike.PreviewId) as isFavorite, count(countLike.PreviewId) as favoriteCount
                         FROM preview as P
-                        INNER JOIN detail 
+                        INNER JOIN detail
+                        LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id) 
                         LEFT OUTER JOIN likedPost as isLike ON(isLike.PreviewId = P.Id and isLike.UserId =:userId)
                         WHERE P.region =:region
-                        GROUP BY P.Id`;
+                        GROUP BY P.Id ORDER BY favoriteCount`;
 
     const result = await db.sequelize.query(query, {
       type: QueryTypes.SELECT,
