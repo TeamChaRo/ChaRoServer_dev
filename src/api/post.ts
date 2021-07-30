@@ -21,5 +21,5 @@ router.get('/preview/like/:userId/:identifier', postController.readLikePreview);
  *  @desc 게시글 더보기 조회(최신순)
  *  @access Public
  */
-router.get('/preview/new/:userId/:identifier');
+router.get('/preview/new/:userId/:identifier', postController.readNewPreview);
 export default router;
