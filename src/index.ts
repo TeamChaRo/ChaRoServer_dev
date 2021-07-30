@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import logger from 'morgan';
 
 import connectDB from './loaders/connect';
+import router from './api';
 
 // connect with database
 connectDB();
@@ -10,7 +11,7 @@ connectDB();
 const app = express();
 
 app.use(logger('dev'));
-
+app.use(router);
 // error handler
 app.use(function (err: any, req: Request, res: Response, next: NextFunction) {
   // set locals, only providing error in development

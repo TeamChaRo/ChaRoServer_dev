@@ -16,7 +16,7 @@ const connectDB = async () => {
       force: config.env === 'db_test' ? true : false,
     };
 
-    //db.sequelize.sync(options).then(() => console.log('Table created'));
+    //db.sequelize.sync({ force: true }).then(() => console.log('Table created'));
   } catch (err) {
     console.error(err.message);
     process.exit(1);
