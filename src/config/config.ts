@@ -18,4 +18,9 @@ export default {
 
   // user image
   defaultImage: process.env.DEFAULT_IMAGE,
+
+  /* Google */
+  googleClientId: process.env.GOOGLE_CLIENT_ID,
+  googleSecret: process.env.GOOGLE_SECRET,
+  googleRedirect: process.env.GOOGLE_REDIRECT,
 };
