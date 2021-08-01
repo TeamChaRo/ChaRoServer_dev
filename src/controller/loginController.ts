@@ -4,6 +4,18 @@ import qs from 'qs';
 import { OAuth2Client } from 'google-auth-library';
 import config from '../config/config';
 
+import loginService from '../service/loginService';
+
+/* login */
+const login = async function (req: Request, res: Response) {
+  console.log(req.body);
+  const { userId, password } = req.body;
+
+  const result = await loginService.normalLogin(userId, password);
+
+  res.status(result.status).json(result.data);
+};
+
 /* Google */
 const google = new OAuth2Client(config.googleClientId, config.googleSecret, config.googleRedirect);
 
@@ -94,4 +106,5 @@ export default {
   googleLogin,
   kakaoURL,
   kakaoLogin,
+  login,
 };
