@@ -8,7 +8,7 @@ import { loginController } from '../controller';
  *  @access Public
  */
 router.get('/login/google', function (req, res) {
-  res.redirect(loginController.authorizeUrl);
+  res.redirect(loginController.googleURL);
 });
 
 /**
@@ -17,5 +17,21 @@ router.get('/login/google', function (req, res) {
  *  @access Public
  */
 router.get('/login/google/callback', loginController.googleLogin);
+
+/**
+ *  @route GET /user/login/kakao
+ *  @desc 카카오 소셜 로그인 -> 클라딴에서 해당 URL로 redirect시켜줘야함
+ *  @access Public
+ */
+router.get('/login/kakao', function (req, res) {
+  res.redirect(loginController.kakaoURL);
+});
+
+/**
+ *  @route GET /user/login/kakao/callback
+ *  @desc 카카오 소셜 로그인 결과 반환(유저 정보 반환)
+ *  @access Public
+ */
+router.get('/login/kakao/callback', loginController.kakaoLogin);
 
 export default router;
