@@ -11,6 +11,7 @@ connectDB();
 const app = express();
 
 app.use(logger('dev'));
+app.use(express.json());
 app.use(router);
 // error handler
 app.use(function (err: any, req: Request, res: Response, next: NextFunction) {

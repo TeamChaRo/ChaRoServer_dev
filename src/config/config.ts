@@ -28,4 +28,8 @@ export default {
   kakaoClientId: process.env.KAKAO_CLIENT_ID,
   kakaoSecret: process.env.KAKAO_SECRET,
   kakaoRedirect: process.env.KAKAO_REDIRECT,
+
+  /* login */
+  jwtSecret: process.env.JWT_SECRET,
+  jwtAlgorithm: process.env.JWT_ALGO,
 };
