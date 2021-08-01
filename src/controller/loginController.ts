@@ -25,9 +25,12 @@ const googleLogin = async function (req: Request, res: Response) {
     audience: config.googleClientId, // multiple clients면 여러개 client ID 사용 가능
   });
   const payload = ticket.getPayload();
-  console.log('로그인 성공 ~ ~ ', payload);
 
-  res.status(200).json({ msg: 'success~' });
+  const email = payload.email;
+  const nickname = payload.name;
+
+  console.log('로그인 성공!', email, nickname);
+  res.status(200).json({ success: true, msg: '구글 로그인 성공!' });
 };
 
 /* Kakao */
@@ -72,9 +75,14 @@ const kakaoLogin = async function (req: Request, res: Response) {
       }, //헤더에 내용을 보고 보내주겠다.
     });
 
-    console.log('로그인 성공!', user.data);
+    // user에게서 필요한 정보
+    const data = user.data;
+    const email = data.kakao_account.email;
+    const nickname = data.properties.nickname;
 
-    res.status(200).json({ success: true, msg: '로그인 성공!' });
+    console.log('로그인 성공!', email, nickname);
+
+    res.status(200).json({ success: true, msg: '카카오 로그인 성공!' });
   } catch (err) {
     console.log(err);
     res.status(500).json({ success: false, msg: '카카오 로그인 실패' });
