@@ -30,6 +30,38 @@ const normalRegister = async function (user: registerDTO) {
   }
 };
 
+const validateEmail = async function (email: string) {
+  try {
+    const user = await db.User.findOne({ where: { email: email } });
+    if (user) {
+      return {
+        status: 200,
+        data: {
+          success: false,
+          msg: '유효하지 않은 이메일이에요!! 빠꾸쳐주세요!!!!!',
+        },
+      };
+    }
+    return {
+      status: 200,
+      data: {
+        success: true,
+        msg:
+          '유효한 이메일이에요~ 내가 가장 닮은 사람은 누구일까? 1. 윤후 2. 승희 3. 강아지똥 4. 성빈 ,, 난 이중에 성빈이라 생각하는데,, 너의 생각은 어떠니',
+      },
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      status: 502,
+      data: {
+        success: false,
+        msg: '이메일 중복체크 DB error',
+      },
+    };
+  }
+};
 export default {
   normalRegister,
+  validateEmail,
 };

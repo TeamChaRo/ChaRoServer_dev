@@ -12,6 +12,13 @@ import { loginController, registerController } from '../controller';
 router.post('/register', registerController.register);
 
 /**
+ *  @route POST /user/register/email
+ *  @desc 일반 회원가입
+ *  @access Public <- Private설정을 따로 할 수 있는가?
+ */
+router.post('/register/email', registerController.checkEmail);
+
+/**
  *  @route POST /user/login
  *  @desc 일반 로그인
  *  @access Public <- Private설정을 따로 할 수 있는가?
