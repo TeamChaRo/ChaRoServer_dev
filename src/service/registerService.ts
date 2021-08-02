@@ -61,7 +61,40 @@ const validateEmail = async function (email: string) {
     };
   }
 };
+
+const validateNickname = async function (nickname: string) {
+  try {
+    const user = await db.User.findOne({ where: { nickname: nickname } });
+    if (user) {
+      return {
+        status: 200,
+        data: {
+          success: false,
+          msg: '유효하지 않은 닉네임!! 빠꾸쳐주세요!!!!!',
+        },
+      };
+    }
+    return {
+      status: 200,
+      data: {
+        success: true,
+        msg: '사용가능 닉네임이에요,, 너무 졸리다..',
+      },
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      status: 502,
+      data: {
+        success: false,
+        msg: '중복체크 DB error',
+      },
+    };
+  }
+};
+
 export default {
   normalRegister,
   validateEmail,
+  validateNickname,
 };

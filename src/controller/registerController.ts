@@ -28,7 +28,15 @@ const checkEmail = async function (req: Request, res: Response) {
   res.status(result.status).json(result.data);
 };
 
+const checkNickname = async function (req: Request, res: Response) {
+  const { nickanme } = req.body;
+
+  const result = await registerService.validateNickname(nickanme);
+  res.status(result.status).json(result.data);
+};
+
 export default {
   register,
   checkEmail,
+  checkNickname,
 };
