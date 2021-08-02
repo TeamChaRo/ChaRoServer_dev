@@ -8,7 +8,6 @@ import loginService from '../service/loginService';
 
 /* login */
 const login = async function (req: Request, res: Response) {
-  console.log(req.body);
   const { userId, password } = req.body;
 
   const result = await loginService.normalLogin(userId, password);
