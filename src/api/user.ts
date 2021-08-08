@@ -16,7 +16,11 @@ router.post('/register', registerController.register);
  *  @desc 이메일 중복 체크
  *  @access Public <- Private설정을 따로 할 수 있는가?
  */
-router.post('/register/email', registerController.checkEmail);
+router.post(
+  '/register/email',
+  check('email', '이메일을 입력해주세요.').isEmail(),
+  registerController.checkEmail
+);
 
 /**
  *  @route POST /user/register/nickname
