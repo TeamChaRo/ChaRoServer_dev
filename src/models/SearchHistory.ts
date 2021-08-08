@@ -2,7 +2,7 @@ import { DataTypes, Model, Sequelize } from 'sequelize';
 import sequelize from '../loaders/database';
 
 export default class SearchHistory extends Model {
-  public UserId!: string;
+  public UserEmail!: string;
   public title!: string;
   public address!: string;
   public latitude!: string;
@@ -15,7 +15,7 @@ export default class SearchHistory extends Model {
 
 SearchHistory.init(
   {
-    UserId: {
+    UserEmail: {
       type: DataTypes.STRING(20),
       primaryKey: true,
       allowNull: false,
