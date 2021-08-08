@@ -8,7 +8,6 @@ const register = async function (req: Request, res: Response) {
 
   const user: registerDTO = {
     email: email,
-    Id: userId,
     password: password,
     profileImage: profileImage,
     nickname: nickname,

@@ -1,5 +1,4 @@
 export interface registerDTO {
-  Id: string;
   password: string;
   email: string;
 
