@@ -3,7 +3,6 @@ import sequelize from '../loaders/database';
 import config from '../config/config';
 
 export default class User extends Model {
-  public Id!: string;
   public password!: string;
   public email!: string;
 
@@ -18,18 +17,16 @@ export default class User extends Model {
 
 User.init(
   {
-    Id: {
-      type: DataTypes.STRING(20),
+    email: {
+      type: DataTypes.STRING(45),
+      allowNull: false,
       primaryKey: true,
     },
     password: {
       type: DataTypes.STRING(100),
       allowNull: true, // social 유저를 위해 null값 허용
     },
-    email: {
-      type: DataTypes.STRING(45),
-      allowNull: false,
-    },
+
     nickname: {
       type: DataTypes.STRING(45),
       allowNull: false,
