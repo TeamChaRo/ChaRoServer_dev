@@ -35,8 +35,8 @@ User.hasMany(SearchHistory, {
 SearchHistory.belongsTo(User, { foreignKey: 'UserId', targetKey: 'Id' });
 
 /* liked & saved Post */
-Preview.belongsToMany(User, { timestamps: false, through: 'liked_post' });
-Preview.belongsToMany(User, { timestamps: false, through: 'saved_post' });
+Preview.belongsToMany(User, { as: 'like', timestamps: false, through: 'likedPost' });
+Preview.belongsToMany(User, { as: 'save', timestamps: false, through: 'savedPost' });
 
 /* follow - User */
 User.belongsToMany(User, {

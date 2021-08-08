@@ -18,4 +18,18 @@ export default {
 
   // user image
   defaultImage: process.env.DEFAULT_IMAGE,
+
+  /* Google */
+  googleClientId: process.env.GOOGLE_CLIENT_ID,
+  googleSecret: process.env.GOOGLE_SECRET,
+  googleRedirect: process.env.GOOGLE_REDIRECT,
+
+  /* Kakao */
+  kakaoClientId: process.env.KAKAO_CLIENT_ID,
+  kakaoSecret: process.env.KAKAO_SECRET,
+  kakaoRedirect: process.env.KAKAO_REDIRECT,
+
+  /* login */
+  jwtSecret: process.env.JWT_SECRET,
+  jwtAlgorithm: process.env.JWT_ALGO,
 };
