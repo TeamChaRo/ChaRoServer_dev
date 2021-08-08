@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import config from '../config/config';
+import { validationResult } from 'express-validator';
 
 import { registerDTO } from '../interface/req/registerDTO';
 import registerService from '../service/registerService';
@@ -21,6 +22,10 @@ const register = async function (req: Request, res: Response) {
 };
 
 const checkEmail = async function (req: Request, res: Response) {
+  const err = validationResult(req);
+  if (!err.isEmpty()) {
+    return res.status(404).json({ success: false, msg: '올바른 이메일 형식을 입력해주세요!' });
+  }
   const { email } = req.body;
 
   const result = await registerService.validateEmail(email);
