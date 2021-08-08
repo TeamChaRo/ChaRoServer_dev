@@ -2,7 +2,28 @@ import express from 'express';
 import { check } from 'express-validator';
 const router = express.Router();
 
-import { loginController } from '../controller';
+import { loginController, registerController } from '../controller';
+
+/**
+ *  @route POST /user/register
+ *  @desc 일반 회원가입
+ *  @access Public <- Private설정을 따로 할 수 있는가?
+ */
+router.post('/register', registerController.register);
+
+/**
+ *  @route POST /user/register/email
+ *  @desc 이메일 중복 체크
+ *  @access Public <- Private설정을 따로 할 수 있는가?
+ */
+router.post('/register/email', registerController.checkEmail);
+
+/**
+ *  @route POST /user/register/nickname
+ *  @desc 닉네임 중복 체크
+ *  @access Public <- Private설정을 따로 할 수 있는가?
+ */
+router.post('/register/nickname', registerController.checkNickname);
 
 /**
  *  @route POST /user/login
