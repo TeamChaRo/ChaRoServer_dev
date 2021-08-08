@@ -12,10 +12,10 @@ import CustomTheme from './CustomTheme';
 
 /* User - Preview(post) */
 User.hasMany(Detail, {
-  foreignKey: 'UserId',
-  sourceKey: 'Id',
+  foreignKey: 'UserEmail',
+  sourceKey: 'email',
 });
-Detail.belongsTo(User, { foreignKey: 'UserId', targetKey: 'Id' });
+Detail.belongsTo(User, { foreignKey: 'UserEmail', targetKey: 'email' });
 
 /* Preview - Detail */
 Preview.hasOne(Detail, {
@@ -29,10 +29,10 @@ Detail.belongsTo(Preview, {
 
 /* User - SearchHistory */
 User.hasMany(SearchHistory, {
-  foreignKey: 'UserId',
-  sourceKey: 'Id',
+  foreignKey: 'UserEmail',
+  sourceKey: 'email',
 });
-SearchHistory.belongsTo(User, { foreignKey: 'UserId', targetKey: 'Id' });
+SearchHistory.belongsTo(User, { foreignKey: 'UserEmail', targetKey: 'email' });
 
 /* liked & saved Post */
 Preview.belongsToMany(User, { as: 'like', timestamps: false, through: 'likedPost' });
