@@ -31,7 +31,7 @@ router.post('/register/nickname', registerController.checkNickname);
  *  @access Public <- Private설정을 따로 할 수 있는가?
  */
 router.post('/login', [
-  check('userId', 'ID를 입력해주세요.').exists(),
+  check('email', '이메일을 입력해주세요.').exists(),
   check('password', 'Password를 입력해주세요.').exists(),
   loginController.login,
 ]);
