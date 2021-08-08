@@ -1,3 +1,4 @@
 import postController from './postController';
 import loginController from './loginController';
-export { postController, loginController };
+import registerController from './registerController';
+export { postController, loginController, registerController };
