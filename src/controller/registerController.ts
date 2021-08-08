@@ -4,7 +4,7 @@ import config from '../config/config';
 import { registerDTO } from '../interface/req/registerDTO';
 import registerService from '../service/registerService';
 const register = async function (req: Request, res: Response) {
-  const { email, userId, password, profileImage, nickname, pushAgree, emailAgree } = req.body;
+  const { email, userEmail, password, profileImage, nickname, pushAgree, emailAgree } = req.body;
 
   const user: registerDTO = {
     email: email,
