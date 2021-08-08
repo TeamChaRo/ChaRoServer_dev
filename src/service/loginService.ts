@@ -3,16 +3,16 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import config from '../config/config';
 
-const normalLogin = async function (id: string, password: string) {
+const normalLogin = async function (email: string, password: string) {
   try {
-    const user = await db.User.findOne({ where: { Id: id } });
+    const user = await db.User.findOne({ where: { email: email } });
 
     if (!user) {
       return {
         status: 404,
         data: {
           success: false,
-          msg: '해당 아이디가 없습니다.',
+          msg: '해당 유저가 없습니다.',
         },
       };
     }
@@ -24,7 +24,7 @@ const normalLogin = async function (id: string, password: string) {
           success: true,
           msg: '로그인에 성공하였습니다.',
           data: {
-            userId: user.Id,
+            email: user.email,
             nickname: user.nickname,
             //token: await token(),
             profileImage: user.profileImage,
