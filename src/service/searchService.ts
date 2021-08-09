@@ -1,9 +1,10 @@
 import { db } from '../models';
 import { QueryTypes } from 'sequelize';
 
+import searchDTO from '../interface/req/searchDTO';
 import mapping from './mapping.json';
 
-export async function getLikeSearch(option: number) {
+export async function getLikeSearch(option: number, search: searchDTO) {
   try {
     return {
       status: 200,
@@ -26,7 +27,7 @@ export async function getLikeSearch(option: number) {
   }
 }
 
-export async function getNewSearch(option: number) {
+export async function getNewSearch(option: number, search: searchDTO) {
   try {
     return {
       status: 200,
