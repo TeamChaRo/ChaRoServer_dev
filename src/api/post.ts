@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import { readController } from '../controller';
+import { readController, searchController } from '../controller';
 
 /**
  *  @route GET /post/detail/:userEmail/:postId
@@ -22,4 +22,19 @@ router.get('/preview/like/:userEmail/:identifier', readController.readLikePrevie
  *  @access Public
  */
 router.get('/preview/new/:userEmail/:identifier', readController.readNewPreview);
+
+/**
+ *  @route POST /post/search/like
+ *  @desc 검색하기 - 인기순
+ *  @access Public
+ */
+router.post('/search/like', searchController.searchLikePost);
+
+/**
+ *  @route POST /post/search/new
+ *  @desc 검색하기 - 최신순
+ *  @access Public
+ */
+router.post('/search/new', searchController.searchNewPost);
+
 export default router;
