@@ -11,7 +11,7 @@ export async function getLikeTrend(userEmail: string) {
                     FROM preview as P
                     LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id)
                     LEFT OUTER JOIN likedPost as isLike ON(isLike.PreviewId = P.Id and isLike.UserEmail =:userEmail)
-                    GROUP BY P.Id ORDER BY favoriteCount`;
+                    GROUP BY P.Id ORDER BY favoriteCount LIMIT 10`;
 
     const result = await db.sequelize.query(query, {
       type: QueryTypes.SELECT,
@@ -50,7 +50,7 @@ export async function getLikeTheme(userEmail: string, theme: string) {
                       LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id)
                       LEFT OUTER JOIN likedPost as isLike ON(isLike.PreviewId = P.Id and isLike.UserEmail =:userEmail)
                       WHERE detail.PostId=P.Id and detail.${theme}= 1
-                      GROUP BY P.Id ORDER BY favoriteCount`;
+                      GROUP BY P.Id ORDER BY favoriteCount LIMIT 10`;
 
     const result = await db.sequelize.query(query, {
       type: QueryTypes.SELECT,
@@ -88,7 +88,7 @@ export async function getLikeLocal(userEmail: string, local: string) {
                         LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id) 
                         LEFT OUTER JOIN likedPost as isLike ON(isLike.PreviewId = P.Id and isLike.UserEmail =:userEmail)
                         WHERE P.region =:region
-                        GROUP BY P.Id ORDER BY favoriteCount`;
+                        GROUP BY P.Id ORDER BY favoriteCount LIMIT 10`;
 
     const result = await db.sequelize.query(query, {
       type: QueryTypes.SELECT,
@@ -123,7 +123,7 @@ export async function getNewTrend(userEmail: string) {
                       DATE_FORMAT(P.createdAt, '%Y-%m-%d') as date, count(isLike.PreviewId) as isFavorite
                       FROM preview as P
                       LEFT OUTER JOIN likedPost as isLike ON(isLike.PreviewId = P.Id and isLike.UserEmail =:userEmail)
-                      GROUP BY P.Id ORDER BY date`;
+                      GROUP BY P.Id ORDER BY date LIMIT 10`;
 
     const result = await db.sequelize.query(query, {
       type: QueryTypes.SELECT,
@@ -160,7 +160,7 @@ export async function getNewTheme(userEmail: string, theme: string) {
                         INNER JOIN detail 
                         LEFT OUTER JOIN likedPost as isLike ON(isLike.PreviewId = P.Id and isLike.UserEmail =:userEmail)
                         WHERE detail.PostId=P.Id and detail.${theme}= 1
-                        GROUP BY P.Id ORDER BY date`;
+                        GROUP BY P.Id ORDER BY date LIMIT 10`;
 
     const result = await db.sequelize.query(query, {
       type: QueryTypes.SELECT,
@@ -198,7 +198,7 @@ export async function getNewLocal(userEmail: string, local: string) {
                           INNER JOIN detail
                           LEFT OUTER JOIN likedPost as isLike ON(isLike.PreviewId = P.Id and isLike.UserEmail =:userEmail)
                           WHERE P.region =:region
-                          GROUP BY P.Id ORDER BY date`;
+                          GROUP BY P.Id ORDER BY date LIMIT 10`;
 
     const result = await db.sequelize.query(query, {
       type: QueryTypes.SELECT,
