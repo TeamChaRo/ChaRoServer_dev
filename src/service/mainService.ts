@@ -1,6 +1,7 @@
 import { db } from '../models';
 import { QueryTypes } from 'sequelize';
 
+import { mainDTO, bannerDTO } from '../interface/res/mainDTO';
 import mapping from './mapping.json';
 
 export async function getMain(userEmail: string) {
