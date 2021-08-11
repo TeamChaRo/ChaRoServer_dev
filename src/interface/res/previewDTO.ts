@@ -18,6 +18,5 @@ export interface driveDTO {
 }
 
 export interface previewDTO {
-  totalCourse: number;
   drive: driveDTO[];
 }
