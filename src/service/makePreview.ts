@@ -6,7 +6,6 @@ import { previewDTO, driveDTO } from '../interface/res/previewDTO';
 export function makePreview(result: object[]): previewDTO {
   let drive: driveDTO[] = [];
   const preview: previewDTO = {
-    totalCourse: result.length,
     drive: drive,
   };
 
