@@ -2,28 +2,10 @@ import { db } from '../models';
 import { QueryTypes } from 'sequelize';
 
 import { mainDTO, bannerDTO } from '../interface/res/mainDTO';
-import { previewDTO, driveDTO } from '../interface/res/previewDTO';
 import { makePreview } from './makePreview';
 
 export async function getMain(userEmail: string, theme: string, region: string) {
   try {
-    /*
-    let banner: bannerDTO[] = [];
-    let today: previewDTO[] = [];
-    let trend: previewDTO[] = [];
-    let custom: previewDTO[] = [];
-    let local: previewDTO[] = [];
-
-    const main: mainDTO = {
-      banner: banner,
-      todayCharoDrive: today,
-      trendDrive: trend,
-      customTitle: '',
-      customDrive: custom,
-      localTitle: '',
-      localDrive: local,
-    };
-*/
     const bannerPromise = db.Banner.findAll({ limit: 4, raw: true, nest: true });
     const initQuery = `SELECT C.customThemeTitle, L.localTitle 
                             FROM customTheme AS C JOIN local AS L 
