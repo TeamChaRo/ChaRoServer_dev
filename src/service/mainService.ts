@@ -2,7 +2,6 @@ import { db } from '../models';
 import { QueryTypes } from 'sequelize';
 
 import { mainDTO, bannerDTO } from '../interface/res/mainDTO';
-import { previewDTO } from '../interface/res/previewDTO';
 import { makePreview } from './makePreview';
 
 export async function getMain(userEmail: string, theme: string, region: string) {
