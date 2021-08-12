@@ -3,6 +3,13 @@ const router = express.Router();
 import { readController, searchController } from '../controller';
 
 /**
+ *  @route GET /post/main/:userEmail
+ *  @desc 메인뷰 데이터 조회
+ *  @access Public
+ */
+router.get('/main/:userEmail', readController.readMain);
+
+/**
  *  @route GET /post/detail/:userEmail/:postId
  *  @desc 게시글 상세정보 조회
  *  @access Public
