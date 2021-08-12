@@ -5,7 +5,7 @@ import { previewDTO } from '../interface/res/previewDTO';
 
 export function makePreview(result: object[]): previewDTO[] {
   const preview: previewDTO[] = [];
-
+  console.log(result);
   for (let data of result) {
     const dateToken = data['date'].split('-');
 
