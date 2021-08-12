@@ -1,4 +1,4 @@
-import { driveDTO, previewDTO } from './previewDTO';
+import { previewDTO } from './previewDTO';
 
 export interface bannerDTO {
   bannerTitle: string;
@@ -8,10 +8,10 @@ export interface bannerDTO {
 
 export interface mainDTO {
   banner: bannerDTO[];
-  todayCharoDrive: previewDTO;
-  trendDrive: previewDTO;
+  todayCharoDrive: previewDTO[];
+  trendDrive: previewDTO[];
   customTitle: string;
-  customDrive: previewDTO;
+  customDrive: previewDTO[];
   localTitle: string;
-  localDrive: previewDTO;
+  localDrive: previewDTO[];
 }

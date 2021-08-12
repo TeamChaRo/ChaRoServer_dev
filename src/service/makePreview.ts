@@ -1,18 +1,15 @@
 import { db } from '../models';
 import { QueryTypes } from 'sequelize';
 
-import { previewDTO, driveDTO } from '../interface/res/previewDTO';
+import { previewDTO } from '../interface/res/previewDTO';
 
-export function makePreview(result: object[]): previewDTO {
-  let drive: driveDTO[] = [];
-  const preview: previewDTO = {
-    drive: drive,
-  };
+export function makePreview(result: object[]): previewDTO[] {
+  const preview: previewDTO[] = [];
 
   for (let data of result) {
     const dateToken = data['date'].split('-');
 
-    const tempDrive: driveDTO = {
+    const tempDrive: previewDTO = {
       postId: data['Id'],
 
       title: data['title'],
@@ -29,7 +26,7 @@ export function makePreview(result: object[]): previewDTO {
       isFavorite: data['isFavorite'] > 0 ? true : false,
     };
 
-    drive.push(tempDrive);
+    preview.push(tempDrive);
   }
   return preview;
 }
