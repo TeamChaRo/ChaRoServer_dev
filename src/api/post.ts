@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import { readController, searchController } from '../controller';
+import { readController, searchController, utilController } from '../controller';
 
 /**
  *  @route GET /post/main/:userEmail
@@ -43,5 +43,19 @@ router.post('/search/like', searchController.searchLikePost);
  *  @access Public
  */
 router.post('/search/new', searchController.searchNewPost);
+
+/**
+ *  @route POST /post/like
+ *  @desc 게시물 좋아하기
+ *  @access Public
+ */
+router.post('/like', utilController.like);
+
+/**
+ *  @route POST /post/new
+ *  @desc 게시물 저장하기
+ *  @access Public
+ */
+router.post('/save', utilController.save);
 
 export default router;
