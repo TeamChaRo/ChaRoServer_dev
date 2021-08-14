@@ -1,4 +1,4 @@
-export interface previewDTO {
+export interface driveDTO {
   postId: number;
 
   title: string;
@@ -15,4 +15,9 @@ export interface previewDTO {
   day: string;
 
   isFavorite: boolean;
+}
+
+export interface previewDTO {
+  lastId: number;
+  drive: driveDTO[];
 }
