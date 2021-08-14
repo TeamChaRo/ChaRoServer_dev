@@ -115,12 +115,12 @@ export async function getLikeSearch(option: number, search: searchDTO) {
                 INNER JOIN detail 
                 LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id)
                 LEFT OUTER JOIN likedPost as isLike ON(isLike.PreviewId = P.Id and isLike.UserEmail =:userEmail)
-                WHERE detail.PostId=P.Id and detail.${search.warning}= 0 and detail.${search.theme}= 1 and P.region =:region
+                WHERE detail.PostId=P.Id and detail.${search.warning}= 0 and detail.${search.theme}= 1 
                 GROUP BY P.Id ORDER BY favoriteCount DESC LIMIT 10`;
 
       result = await db.sequelize.query(query, {
         type: QueryTypes.SELECT,
-        replacements: { userEmail: search.userEmail, region: search.region },
+        replacements: { userEmail: search.userEmail },
         raw: true,
         nest: true,
       });
@@ -132,12 +132,12 @@ export async function getLikeSearch(option: number, search: searchDTO) {
                 INNER JOIN detail 
                 LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id)
                 LEFT OUTER JOIN likedPost as isLike ON(isLike.PreviewId = P.Id and isLike.UserEmail =:userEmail)
-                WHERE detail.PostId=P.Id and detail.${search.warning}= 0 and detail.${search.theme}= 1
+                WHERE detail.PostId=P.Id and detail.${search.warning}= 0 and detail.${search.theme}= 1 and P.region =:region
                 GROUP BY P.Id ORDER BY favoriteCount DESC LIMIT 10`;
 
       result = await db.sequelize.query(query, {
         type: QueryTypes.SELECT,
-        replacements: { userEmail: search.userEmail },
+        replacements: { userEmail: search.userEmail, region: search.region },
         raw: true,
         nest: true,
       });
