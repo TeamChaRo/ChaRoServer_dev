@@ -2,13 +2,20 @@ import { Request, Response } from 'express';
 
 import { previewDTO, detailDTO } from '../interface/req/writePostDTO';
 
-import { doWrite } from '../service/wrtieService';
+import { doWrite } from '../service/writeService';
 import mapping from '../service/mapping.json';
 
 const writePost = async function (req: Request, res: Response) {
+  // images path
+  let imagesPath: string[] = [];
+  if (req.files) {
+    for (let file of req.files as Express.MulterS3.File[])
+      imagesPath.push((file as Express.MulterS3.File).location);
+  }
+
   const preview: previewDTO = {
     title: req.body.title,
-    image: 'temp',
+    image: imagesPath[0],
     region: req.body.region,
     theme: mapping.theme[req.body.theme[0]], //첫번쨰거 파싱
     warning: req.body.warning ? mapping.warning[req.body.warning[0]] : '', // 첫번째거 파싱
@@ -37,11 +44,11 @@ const writePost = async function (req: Request, res: Response) {
     destLongitude: req.body.course[req.body.course.length - 1]['longitude'],
     destLatitude: req.body.course[req.body.course.length - 1]['latitude'],
 
-    image1: '',
-    image2: '',
-    image3: '',
-    image4: '',
-    image5: '',
+    image1: imagesPath.length > 1 ? imagesPath[1] : '',
+    image2: imagesPath.length > 2 ? imagesPath[2] : '',
+    image3: imagesPath.length > 3 ? imagesPath[3] : '',
+    image4: imagesPath.length > 4 ? imagesPath[4] : '',
+    image5: imagesPath.length > 5 ? imagesPath[5] : '',
 
     spring: false,
     summer: false,

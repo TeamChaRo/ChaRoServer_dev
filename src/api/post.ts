@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import { readController, searchController, utilController, writeController } from '../controller';
-
+import upload from '../middleware/upload';
 /**
  *  @route GET /post/main/:userEmail
  *  @desc 메인뷰 데이터 조회
@@ -63,5 +63,5 @@ router.post('/save', utilController.save);
  *  @desc 게시물 작성하기
  *  @access Public
  */
-router.post('/write', writeController.writePost);
+router.post('/write', upload.postImages, writeController.writePost);
 export default router;
