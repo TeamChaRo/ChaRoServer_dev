@@ -19,5 +19,6 @@ export interface driveDTO {
 
 export interface previewDTO {
   lastId: number;
+  lastCount: number;
   drive: driveDTO[];
 }

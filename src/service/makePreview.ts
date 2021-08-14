@@ -7,12 +7,15 @@ export function makePreview(result: object[]): previewDTO {
   const drive: driveDTO[] = [];
   const preview: previewDTO = {
     lastId: 0,
+    lastCount: 0,
     drive: drive,
   };
 
   for (let idx in result) {
-    if (parseInt(idx) == result.length - 1) preview.lastId = result[idx]['Id'];
-
+    if (parseInt(idx) == result.length - 1) {
+      preview.lastId = result[idx]['Id'];
+      preview.lastCount = result[idx]['favoriteCount'] ? result[idx]['favoriteCount'] : 0;
+    }
     const dateToken = result[idx]['date'].split('-');
 
     const tempDrive: driveDTO = {
