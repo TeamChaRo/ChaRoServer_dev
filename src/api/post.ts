@@ -1,6 +1,7 @@
 import express from 'express';
 const router = express.Router();
-import { readController, searchController, utilController } from '../controller';
+import { readController, searchController, utilController, writeController } from '../controller';
+import { read } from 'fs';
 
 /**
  *  @route GET /post/main/:userEmail
@@ -57,5 +58,19 @@ router.post('/like', utilController.like);
  *  @access Public
  */
 router.post('/save', utilController.save);
+
+/**
+ *  @route POST /post/saveHistory
+ *  @desc 게시글 작성 시 출발/경유/목적 검색 기록 저장
+ *  @access Public
+ */
+router.post('/saveHistory', writeController.saveHistory);
+
+/**
+ *  @route POST /post/readHistory
+ *  @desc 게시글 작성 시 출발/경유/목적 검색 기록 조회
+ *  @access Public
+ */
+router.post('/readHistory', writeController.readHistory);
 
 export default router;
