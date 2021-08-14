@@ -31,7 +31,7 @@ export async function getLikeSearch(option: number, search: searchDTO) {
                         LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id) 
                         LEFT OUTER JOIN likedPost as isLike ON(isLike.PreviewId = P.Id and isLike.UserEmail =:userEmail)
                         WHERE P.region =:region
-                        GROUP BY P.Id ORDER BY favoriteCount DESC LIMIT 10`;
+                        GROUP BY P.Id ORDER BY favoriteCount DESC, P.Id DESC LIMIT 10`;
 
       result = await db.sequelize.query(query, {
         type: QueryTypes.SELECT,
@@ -48,7 +48,7 @@ export async function getLikeSearch(option: number, search: searchDTO) {
                 LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id)
                 LEFT OUTER JOIN likedPost as isLike ON(isLike.PreviewId = P.Id and isLike.UserEmail =:userEmail)
                 WHERE detail.PostId=P.Id and detail.${search.theme}= 1
-                GROUP BY P.Id ORDER BY favoriteCount DESC LIMIT 10`;
+                GROUP BY P.Id ORDER BY favoriteCount DESC, P.Id DESC LIMIT 10`;
 
       result = await db.sequelize.query(query, {
         type: QueryTypes.SELECT,
@@ -82,7 +82,7 @@ export async function getLikeSearch(option: number, search: searchDTO) {
                       LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id)
                       LEFT OUTER JOIN likedPost as isLike ON(isLike.PreviewId = P.Id and isLike.UserEmail =:userEmail)
                       WHERE detail.PostId=P.Id and detail.${search.theme}= 1 and P.region =:region
-                      GROUP BY P.Id ORDER BY favoriteCount DESC LIMIT 10`;
+                      GROUP BY P.Id ORDER BY favoriteCount DESC, P.Id DESC LIMIT 10`;
 
       result = await db.sequelize.query(query, {
         type: QueryTypes.SELECT,
@@ -99,7 +99,7 @@ export async function getLikeSearch(option: number, search: searchDTO) {
                 LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id)
                 LEFT OUTER JOIN likedPost as isLike ON(isLike.PreviewId = P.Id and isLike.UserEmail =:userEmail)
                 WHERE detail.PostId=P.Id and detail.${search.warning}= 0 and P.region =:region
-                GROUP BY P.Id ORDER BY favoriteCount DESC LIMIT 10`;
+                GROUP BY P.Id ORDER BY favoriteCount DESC, P.Id DESC LIMIT 10`;
 
       result = await db.sequelize.query(query, {
         type: QueryTypes.SELECT,
@@ -116,7 +116,7 @@ export async function getLikeSearch(option: number, search: searchDTO) {
                 LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id)
                 LEFT OUTER JOIN likedPost as isLike ON(isLike.PreviewId = P.Id and isLike.UserEmail =:userEmail)
                 WHERE detail.PostId=P.Id and detail.${search.warning}= 0 and detail.${search.theme}= 1 
-                GROUP BY P.Id ORDER BY favoriteCount DESC LIMIT 10`;
+                GROUP BY P.Id ORDER BY favoriteCount DESC, P.Id DESC LIMIT 10`;
 
       result = await db.sequelize.query(query, {
         type: QueryTypes.SELECT,
@@ -133,7 +133,7 @@ export async function getLikeSearch(option: number, search: searchDTO) {
                 LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id)
                 LEFT OUTER JOIN likedPost as isLike ON(isLike.PreviewId = P.Id and isLike.UserEmail =:userEmail)
                 WHERE detail.PostId=P.Id and detail.${search.warning}= 0 and detail.${search.theme}= 1 and P.region =:region
-                GROUP BY P.Id ORDER BY favoriteCount DESC LIMIT 10`;
+                GROUP BY P.Id ORDER BY favoriteCount DESC, P.Id DESC LIMIT 10`;
 
       result = await db.sequelize.query(query, {
         type: QueryTypes.SELECT,
