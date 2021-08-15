@@ -41,6 +41,46 @@ export async function getLikeTrend(userEmail: string) {
   }
 }
 
+export async function getLikeMoreTrend(userEmail: string, postId: string, count: string) {
+  try {
+    console.log(userEmail, postId, count);
+    const query = `SELECT P.Id, P.title, P.image, P.region, P.theme, P.warning, 
+                    DATE_FORMAT(P.createdAt, '%Y-%m-%d') as date, count(isLike.PreviewId) as isFavorite, count(countLike.PreviewId) as favoriteCount
+                    FROM preview as P
+                    LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id)
+                    LEFT OUTER JOIN likedPost as isLike ON(isLike.PreviewId = P.Id and isLike.UserEmail =:userEmail)
+                    GROUP BY P.Id 
+                    HAVING (count(countLike.PreviewId) = :count and P.Id < :postId)
+                    ORDER BY favoriteCount DESC, P.Id DESC LIMIT 10`;
+
+    const result = await db.sequelize.query(query, {
+      type: QueryTypes.SELECT,
+      replacements: { userEmail: userEmail, count: parseInt(count), postId: parseInt(postId) },
+      raw: true,
+      nest: true,
+    });
+
+    return {
+      status: 200,
+      data: {
+        success: true,
+        msg:
+          '오늘은 7월 30일 4시 41분,, 저녁시간까진 50분.. 나는 0끼.. 배고파 죽겠다 떡볶이 먹고싶은데 님은 뭐드시고싶으세요?', //"successfully load Today's preview sorted by date",
+        data: makePreview(result),
+      },
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      status: 502,
+      data: {
+        success: false,
+        msg: '게시글 더보기 실패',
+      },
+    };
+  }
+}
+
 export async function getLikeTheme(userEmail: string, theme: string) {
   try {
     const query = `SELECT P.Id, P.title, P.image, P.region, P.theme, P.warning, 

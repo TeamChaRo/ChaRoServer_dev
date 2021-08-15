@@ -17,18 +17,35 @@ router.get('/main/:userEmail', readController.readMain);
 router.get('/detail/:userEmail/:postId', readController.readPost);
 
 /**
- *  @route GET /post/like/:userEmail/:postId
+ *  @route GET /post/like/:userEmail/:identifier
  *  @desc 게시글 더보기 조회(인기순)
  *  @access Public
  */
 router.get('/preview/like/:userEmail/:identifier', readController.readLikePreview);
 
 /**
- *  @route GET /post/new/:userEmail/:postId
+ *  @route GET /post/new/:userEmail/:identifier
  *  @desc 게시글 더보기 조회(최신순)
  *  @access Public
  */
 router.get('/preview/new/:userEmail/:identifier', readController.readNewPreview);
+
+/**
+ *  @route GET /post/like/:userEmail/:identifier/:postId
+ *  @desc 게시글 더보기 조회(인기순) - 무한스크롤
+ *  @access Public
+ */
+router.get(
+  '/preview/like/:userEmail/:identifier/:postId/:count',
+  readController.readLikeMorePreview
+);
+
+/**
+ *  @route GET /post/new/:userEmail/:identifier/:postId
+ *  @desc 게시글 더보기 조회(최신순) - 무한스크롤
+ *  @access Public
+ */
+router.get('/preview/new/:userEmail/:identifier/:postId', readController.readNewMorePreview);
 
 /**
  *  @route POST /post/search/like
