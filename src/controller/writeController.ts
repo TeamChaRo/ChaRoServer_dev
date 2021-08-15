@@ -23,7 +23,7 @@ const saveHistory = async function (req: Request, res: Response) {
 };
 
 const readHistory = async function (req: Request, res: Response) {
-  const { userEmail } = req.body;
+  const { userEmail } = req.params;
 
   const result = await read(userEmail);
   res.status(result.status).json(result.data);

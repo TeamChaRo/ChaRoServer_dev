@@ -71,6 +71,6 @@ router.post('/saveHistory', writeController.saveHistory);
  *  @desc 게시글 작성 시 출발/경유/목적 검색 기록 조회
  *  @access Public
  */
-router.post('/readHistory', writeController.readHistory);
+router.get('/readHistory/:userEmail', writeController.readHistory);
 
 export default router;

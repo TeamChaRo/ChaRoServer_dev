@@ -12,14 +12,12 @@ function insertFunction(entity: saveHistoryDTO) {
     })
       .then(async (ret) => {
         if (!ret) {
-          console.log('??!!?!?!?!?!!?');
           await db.SearchHistory.create(entity);
           resolve('create search history');
         } else {
-          console.log('update!');
           await db.SearchHistory.update(
             { UserEmail: ret.UserEmail },
-            { where: { UserEmail: ret.UserEmail, title: ret.title } }
+            { where: { UserEmail: ret.UserEmail } }
           );
           resolve('update search history');
         }
