@@ -62,11 +62,25 @@ router.get('/preview/new/:userEmail/:identifier/:postId', readController.readNew
 router.post('/search/like', searchController.searchLikePost);
 
 /**
+ *  @route POST /post/search/like/more
+ *  @desc 검색하기 - 인기순(무한스크롤)
+ *  @access Public
+ */
+router.post('/search/like/more', searchController.searchLikeMorePost);
+
+/**
  *  @route POST /post/search/new
  *  @desc 검색하기 - 최신순
  *  @access Public
  */
 router.post('/search/new', searchController.searchNewPost);
+
+/**
+ *  @route POST /post/search/new/more
+ *  @desc 검색하기 - 최신순(무한스크롤)
+ *  @access Public
+ */
+router.post('/search/new/more', searchController.searchNewMorePost);
 
 /**
  *  @route POST /post/like
