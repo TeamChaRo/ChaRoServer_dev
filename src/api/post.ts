@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import { readController, searchController, utilController, writeController } from '../controller';
+import { readController, searchController, utilController, tempController } from '../controller';
 import upload from '../middleware/upload';
 /**
  *  @route GET /post/main/:userEmail
@@ -63,5 +63,5 @@ router.post('/save', utilController.save);
  *  @desc 게시물 작성하기
  *  @access Public
  */
-router.post('/write', upload.postImages, writeController.writePost);
+router.post('/write', upload.postImages, tempController.writePost);
 export default router;

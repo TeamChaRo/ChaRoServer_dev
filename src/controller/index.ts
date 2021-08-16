@@ -3,12 +3,12 @@ import searchController from './searchController';
 import loginController from './loginController';
 import registerController from './registerController';
 import utilController from './utilController';
-import writeController from './writeController';
+import tempController from './tempController';
 export {
   readController,
   loginController,
   registerController,
   searchController,
   utilController,
-  writeController,
+  tempController,
 };
