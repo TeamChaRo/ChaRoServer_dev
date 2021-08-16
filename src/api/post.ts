@@ -1,6 +1,13 @@
 import express from 'express';
 const router = express.Router();
-import { readController, searchController, utilController } from '../controller';
+import {
+  readController,
+  searchController,
+  utilController,
+  writeController,
+  searchHistoryController,
+} from '../controller';
+import upload from '../middleware/upload';
 
 /**
  *  @route GET /post/main/:userEmail
@@ -74,5 +81,26 @@ router.post('/like', utilController.like);
  *  @access Public
  */
 router.post('/save', utilController.save);
+
+/**
+ *  @route POST /post/write
+ *  @desc 게시물 작성하기
+ *  @access Public
+ */
+router.post('/write', upload.postImages, writeController.writePost);
+
+/**
+ *  @route POST /post/saveHistory
+ *  @desc 게시글 작성 시 출발/경유/목적 검색 기록 저장
+ *  @access Public
+ */
+router.post('/saveHistory', searchHistoryController.saveHistory);
+
+/**
+ *  @route POST /post/readHistory
+ *  @desc 게시글 작성 시 출발/경유/목적 검색 기록 조회
+ *  @access Public
+ */
+router.get('/readHistory/:userEmail', searchHistoryController.readHistory);
 
 export default router;
