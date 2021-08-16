@@ -287,6 +287,43 @@ export async function getNewTrend(userEmail: string) {
   }
 }
 
+export async function getNewMoreTrend(userEmail: string, postId: string) {
+  try {
+    const query = `SELECT P.Id, P.title, P.image, P.region, P.theme, P.warning, 
+                      DATE_FORMAT(P.createdAt, '%Y-%m-%d') as date, count(isLike.PreviewId) as isFavorite
+                      FROM preview as P
+                      LEFT OUTER JOIN likedPost as isLike ON(isLike.PreviewId = P.Id and isLike.UserEmail =:userEmail)
+                      GROUP BY P.Id 
+                      HAVING P.Id < :postId
+                      ORDER BY P.Id DESC LIMIT 10`;
+
+    const result = await db.sequelize.query(query, {
+      type: QueryTypes.SELECT,
+      replacements: { userEmail: userEmail, postId: parseInt(postId) },
+      raw: true,
+      nest: true,
+    });
+
+    return {
+      status: 200,
+      data: {
+        success: true,
+        msg: '요즘뜨는 최신순 무한스크롤 고고', //"successfully load Today's preview sorted by date",
+        data: makePreview(result),
+      },
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      status: 502,
+      data: {
+        success: false,
+        msg: '게시글 더보기 실패',
+      },
+    };
+  }
+}
+
 export async function getNewTheme(userEmail: string, theme: string) {
   try {
     const query = `SELECT P.Id, P.title, P.image, P.region, P.theme, P.warning, 
@@ -325,6 +362,45 @@ export async function getNewTheme(userEmail: string, theme: string) {
   }
 }
 
+export async function getNewMoreTheme(userEmail: string, theme: string, postId: string) {
+  try {
+    const query = `SELECT P.Id, P.title, P.image, P.region, P.theme, P.warning, 
+                        DATE_FORMAT(P.createdAt, '%Y-%m-%d') as date, count(isLike.PreviewId) as isFavorite
+                        FROM preview as P
+                        INNER JOIN detail 
+                        LEFT OUTER JOIN likedPost as isLike ON(isLike.PreviewId = P.Id and isLike.UserEmail =:userEmail)
+                        WHERE detail.PostId=P.Id and detail.${theme}= 1
+                        GROUP BY P.Id 
+                        HAVING P.Id < :postId
+                        ORDER BY P.Id DESC LIMIT 10`;
+
+    const result = await db.sequelize.query(query, {
+      type: QueryTypes.SELECT,
+      replacements: { userEmail: userEmail, postId: parseInt(postId) },
+      raw: true,
+      nest: true,
+    });
+
+    return {
+      status: 200,
+      data: {
+        success: true,
+        msg: '이곳은 테마 최신순 무한스크롤영역,,,', //"successfully load Today's preview sorted by date",
+        data: makePreview(result),
+      },
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      status: 502,
+      data: {
+        success: false,
+        msg: '게시글 더보기 실패',
+      },
+    };
+  }
+}
+
 export async function getNewLocal(userEmail: string, local: string) {
   try {
     const query = `SELECT P.Id, P.title, P.image, P.region, P.theme, P.warning, 
@@ -347,6 +423,49 @@ export async function getNewLocal(userEmail: string, local: string) {
       data: {
         success: true,
         msg: '이미 개발해놓은 것들 따라가기 위해 분주한 중입니다.. 으샤으샤', //"successfully load Today's preview sorted by date",
+        data: makePreview(result),
+      },
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      status: 502,
+      data: {
+        success: false,
+        msg: '게시글 더보기 실패',
+      },
+    };
+  }
+}
+
+export async function getNewMoreLocal(userEmail: string, local: string, postId: string) {
+  try {
+    const query = `SELECT P.Id, P.title, P.image, P.region, P.theme, P.warning, 
+                          DATE_FORMAT(P.createdAt, '%Y-%m-%d') as date, count(isLike.PreviewId) as isFavorite
+                          FROM preview as P
+                          INNER JOIN detail
+                          LEFT OUTER JOIN likedPost as isLike ON(isLike.PreviewId = P.Id and isLike.UserEmail =:userEmail)
+                          WHERE P.region =:region
+                          GROUP BY P.Id
+                          HAVING P.Id < :postId
+                          ORDER BY P.Id DESC LIMIT 10`;
+
+    const result = await db.sequelize.query(query, {
+      type: QueryTypes.SELECT,
+      replacements: {
+        userEmail: userEmail,
+        region: mapping.region[local],
+        postId: parseInt(postId),
+      },
+      raw: true,
+      nest: true,
+    });
+
+    return {
+      status: 200,
+      data: {
+        success: true,
+        msg: '지역별 최신순 무한 스크롤임니다', //"successfully load Today's preview sorted by date",
         data: makePreview(result),
       },
     };

@@ -11,6 +11,9 @@ import {
   getNewTrend,
   getNewTheme,
   getNewLocal,
+  getNewMoreTrend,
+  getNewMoreTheme,
+  getNewMoreLocal,
 } from '../service/previewService';
 import { getMain } from '../service/mainService';
 // userEmail 검사는.... 따로 빼야되는데, 사실?! 실제로는 이상한 아이디가 들어올 수 없지 않나.
@@ -69,7 +72,24 @@ const readNewPreview = async function (req: Request, res: Response) {
   return res.status(result.status).json(result.data);
 };
 
-const readNewMorePreview = async function (req: Request, res: Response) {};
+const readNewMorePreview = async function (req: Request, res: Response) {
+  const { userEmail, identifier, postId } = req.params;
+  const { value } = req.query;
+
+  let result: any;
+
+  if (identifier == '0') {
+    result = await getNewMoreTrend(userEmail, postId);
+  } else if (identifier == '1') {
+    result = await getNewMoreTheme(userEmail, value as string, postId);
+  } else if (identifier == '2') {
+    result = await getNewMoreLocal(userEmail, value as string, postId);
+  } else if (identifier == '3') {
+    // cumstom_theme 값 ( 관리자 권한 ) <- 얘는 10개로 두자..
+    result = await getNewTheme(userEmail, 'river');
+  }
+  return res.status(result.status).json(result.data);
+};
 
 const readLikeMorePreview = async function (req: Request, res: Response) {
   const { userEmail, identifier, postId, count } = req.params;
