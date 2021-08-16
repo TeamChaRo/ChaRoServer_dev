@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/yaeoni/ChaRoServer_dev#readme",
   "dependencies": {
+    "@types/multer-s3": "^2.7.10",
+    "aws-sdk": "^2.938.0",
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "dotenv": "^10.0.0",
@@ -26,8 +28,11 @@
     "express-validator": "^6.12.1",
     "google-auth-library": "^7.4.1",
     "jsonwebtoken": "^8.5.1",
+    "multer": "^1.4.3",
+    "multer-s3": "^2.9.0",
     "mysql2": "^2.2.5",
     "nodemon": "^2.0.12",
+    "s3": "^4.0.0",
     "sequelize": "^6.6.5"
   },
   "devDependencies": {
