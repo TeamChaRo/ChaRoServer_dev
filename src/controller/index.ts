@@ -4,6 +4,7 @@ import loginController from './loginController';
 import registerController from './registerController';
 import utilController from './utilController';
 import tempController from './tempController';
+import writeController from './writeController';
 export {
   readController,
   loginController,
@@ -11,4 +12,5 @@ export {
   searchController,
   utilController,
   tempController,
+  writeController,
 };

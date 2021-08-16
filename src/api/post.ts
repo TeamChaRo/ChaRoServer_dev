@@ -1,7 +1,8 @@
 import express from 'express';
 const router = express.Router();
-import { readController, searchController, utilController, tempController } from '../controller';
+import { readController, searchController, utilController, tempController, writeController } from '../controller';
 import upload from '../middleware/upload';
+
 /**
  *  @route GET /post/main/:userEmail
  *  @desc 메인뷰 데이터 조회
@@ -64,4 +65,18 @@ router.post('/save', utilController.save);
  *  @access Public
  */
 router.post('/write', upload.postImages, tempController.writePost);
+
+ *  @route POST /post/saveHistory
+ *  @desc 게시글 작성 시 출발/경유/목적 검색 기록 저장
+ *  @access Public
+ */
+router.post('/saveHistory', writeController.saveHistory);
+
+/**
+ *  @route POST /post/readHistory
+ *  @desc 게시글 작성 시 출발/경유/목적 검색 기록 조회
+ *  @access Public
+ */
+router.get('/readHistory/:userEmail', writeController.readHistory);
+
 export default router;
