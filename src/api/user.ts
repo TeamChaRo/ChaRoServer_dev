@@ -84,6 +84,6 @@ router.get('/myPage/like/:userEmail', myPageController.myPageLike);
  *  @desc 마이페이지 정보 반환 - 최신순
  *  @access Public
  */
-router.get('/myPage/like/:userEmail', myPageController.myPageNew);
+router.get('/myPage/new/:userEmail', myPageController.myPageNew);
 
 export default router;
