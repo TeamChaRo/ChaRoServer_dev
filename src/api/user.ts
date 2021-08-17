@@ -2,7 +2,7 @@ import express from 'express';
 import { check } from 'express-validator';
 const router = express.Router();
 
-import { loginController, registerController } from '../controller';
+import { loginController, registerController, myPageController } from '../controller';
 
 /**
  *  @route POST /user/register
@@ -71,5 +71,47 @@ router.get('/login/kakao', function (req, res) {
  *  @access Public
  */
 router.get('/login/kakao/callback', loginController.kakaoLogin);
+
+/**
+ *  @route GET /user/myPage/like/:userEmail
+ *  @desc 마이페이지 정보 반환 - 인기순
+ *  @access Public
+ */
+router.get('/myPage/like/:userEmail', myPageController.myPageLike);
+
+/**
+ *  @route GET /user/myPage/new/:userEmail
+ *  @desc 마이페이지 정보 반환 - 최신순
+ *  @access Public
+ */
+router.get('/myPage/new/:userEmail', myPageController.myPageNew);
+
+/**
+ *  @route GET /user/myPage/like/:userEmail/write/:postId/:count
+ *  @desc 마이페이지 무한스크롤 - 저장/인기
+ *  @access Public
+ */
+router.get('/myPage/like/:userEmail/write/:postId/:count', myPageController.myPageLikeMoreWrite);
+
+/**
+ *  @route GET /user/myPage/like/:userEmail/save/:postId/:count
+ *  @desc 마이페이지 무한스크롤 - 저장/작성
+ *  @access Public
+ */
+router.get('/myPage/like/:userEmail/save/:postId/:count', myPageController.myPageLikeMoreSave);
+
+/**
+ *  @route GET /user/myPage/new/:userEmail/write/:postId/:count
+ *  @desc 마이페이지 무한스크롤 - 저장/인기
+ *  @access Public
+ */
+router.get('/myPage/new/:userEmail/write/:postId', myPageController.myPageNewMoreWrite);
+
+/**
+ *  @route GET /user/myPage/new/:userEmail/save/:postId/:count
+ *  @desc 마이페이지 무한스크롤 - 저장/작성
+ *  @access Public
+ */
+router.get('/myPage/new/:userEmail/save/:postId', myPageController.myPageNewMoreSave);
 
 export default router;
