@@ -8,10 +8,10 @@ export interface bannerDTO {
 
 export interface mainDTO {
   banner: bannerDTO[];
-  todayCharoDrive: previewDTO[];
-  trendDrive: previewDTO[];
+  todayCharoDrive: previewDTO;
+  trendDrive: previewDTO;
   customTitle: string;
-  customDrive: previewDTO[];
+  customDrive: previewDTO;
   localTitle: string;
-  localDrive: previewDTO[];
+  localDrive: previewDTO;
 }
