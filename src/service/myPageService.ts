@@ -14,7 +14,7 @@ export async function getLikeMyPage(userEmail: string) {
                     LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id)
                     LEFT OUTER JOIN savedPost as countSave ON(countSave.PreviewId = P.Id)
                     WHERE D.PostId = P.Id
-                    GROUP BY P.Id ORDER BY favoriteCount DESC, P.Id DESC LIMIT 5`;
+                    GROUP BY P.Id ORDER BY favoriteCount DESC, P.Id DESC LIMIT 10`;
 
     const writePromise = db.sequelize.query(writeQuery, {
       type: QueryTypes.SELECT,
@@ -30,7 +30,7 @@ export async function getLikeMyPage(userEmail: string) {
                     LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id)
                     LEFT OUTER JOIN savedPost as countSave ON(countSave.PreviewId = P.Id)
                     WHERE S.PreviewId = P.Id
-                    GROUP BY P.Id ORDER BY favoriteCount DESC, P.Id DESC LIMIT 3`;
+                    GROUP BY P.Id ORDER BY favoriteCount DESC, P.Id DESC LIMIT 10`;
 
     const savePromise = db.sequelize.query(saveQuery, {
       type: QueryTypes.SELECT,
@@ -141,7 +141,7 @@ export async function getLikeMoreWriteMyPage(userEmail: string, postId: string, 
                     WHERE D.PostId = P.Id
                     GROUP BY P.Id 
                     HAVING (count(countLike.PreviewId) = :count and P.Id < :postId) 
-                    ORDER BY favoriteCount DESC, P.Id DESC LIMIT 5`;
+                    ORDER BY favoriteCount DESC, P.Id DESC LIMIT 10`;
 
     const result = await db.sequelize.query(writeQuery, {
       type: QueryTypes.SELECT,
@@ -187,7 +187,7 @@ export async function getLikeMoreSaveMyPage(userEmail: string, postId: string, c
                     WHERE S.PreviewId = P.Id
                     GROUP BY P.Id 
                     HAVING (count(countLike.PreviewId) = :count and P.Id < :postId) 
-                    ORDER BY favoriteCount DESC, P.Id DESC LIMIT 3`;
+                    ORDER BY favoriteCount DESC, P.Id DESC LIMIT 10`;
 
     const result = await db.sequelize.query(saveQuery, {
       type: QueryTypes.SELECT,
@@ -231,7 +231,7 @@ export async function getNewMyPage(userEmail: string) {
                     LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id)
                     LEFT OUTER JOIN savedPost as countSave ON(countSave.PreviewId = P.Id)
                     WHERE D.PostId = P.Id
-                    GROUP BY P.Id ORDER BY P.Id DESC LIMIT 5`;
+                    GROUP BY P.Id ORDER BY P.Id DESC LIMIT 10`;
 
     const writePromise = db.sequelize.query(writeQuery, {
       type: QueryTypes.SELECT,
@@ -247,7 +247,7 @@ export async function getNewMyPage(userEmail: string) {
                     LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id)
                     LEFT OUTER JOIN savedPost as countSave ON(countSave.PreviewId = P.Id)
                     WHERE S.PreviewId = P.Id
-                    GROUP BY P.Id ORDER BY P.Id DESC LIMIT 3`;
+                    GROUP BY P.Id ORDER BY P.Id DESC LIMIT 10`;
 
     const savePromise = db.sequelize.query(saveQuery, {
       type: QueryTypes.SELECT,
@@ -358,7 +358,7 @@ export async function getNewMoreWriteMyPage(userEmail: string, postId: string) {
                     WHERE D.PostId = P.Id
                     GROUP BY P.Id 
                     HAVING P.Id < :postId
-                    ORDER BY P.Id DESC LIMIT 5`;
+                    ORDER BY P.Id DESC LIMIT 10`;
 
     const result = await db.sequelize.query(writeQuery, {
       type: QueryTypes.SELECT,
@@ -403,7 +403,7 @@ export async function getNewMoreSaveMyPage(userEmail: string, postId: string) {
                     LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id)
                     LEFT OUTER JOIN savedPost as countSave ON(countSave.PreviewId = P.Id)
                     WHERE S.PreviewId = P.Id
-                    GROUP BY P.Id ORDER BY P.Id DESC LIMIT 3`;
+                    GROUP BY P.Id ORDER BY P.Id DESC LIMIT 10`;
 
     const result = await db.sequelize.query(saveQuery, {
       type: QueryTypes.SELECT,
