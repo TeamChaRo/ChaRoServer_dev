@@ -34,11 +34,14 @@ router.post('/register/nickname', registerController.checkNickname);
  *  @desc 일반 로그인
  *  @access Public <- Private설정을 따로 할 수 있는가?
  */
-router.post('/login', [
-  check('email', '이메일을 입력해주세요.').exists(),
-  check('password', 'Password를 입력해주세요.').exists(),
-  loginController.login,
-]);
+router.post(
+  '/login',
+  [
+    check('email', '이메일을 입력해주세요.').exists(),
+    check('password', 'Password를 입력해주세요.').exists(),
+  ],
+  loginController.login
+);
 
 /**
  *  @route GET /user/login/google
