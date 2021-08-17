@@ -1,4 +1,4 @@
-import { driveDTO } from './previewDTO';
+import { previewDTO } from './previewDTO';
 export interface myPageUser {
   nickname: string;
   profileImage: string;
@@ -8,6 +8,6 @@ export interface myPageUser {
 
 export interface myPageDTO {
   userInformation: myPageUser;
-  writtenPost: driveDTO;
-  savedPost: driveDTO;
+  writtenPost: previewDTO;
+  savedPost: previewDTO;
 }
