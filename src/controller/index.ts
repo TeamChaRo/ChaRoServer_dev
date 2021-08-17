@@ -5,6 +5,7 @@ import registerController from './registerController';
 import utilController from './utilController';
 import writeController from './writeController';
 import searchHistoryController from './searchHistoryController';
+import myPageController from './myPageController';
 export {
   readController,
   loginController,
@@ -13,4 +14,5 @@ export {
   utilController,
   writeController,
   searchHistoryController,
+  myPageController,
 };
