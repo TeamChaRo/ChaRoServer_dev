@@ -86,4 +86,32 @@ router.get('/myPage/like/:userEmail', myPageController.myPageLike);
  */
 router.get('/myPage/new/:userEmail', myPageController.myPageNew);
 
+/**
+ *  @route GET /user/myPage/like/:userEmail/write/:postId/:count
+ *  @desc 마이페이지 무한스크롤 - 저장/인기
+ *  @access Public
+ */
+router.get('/myPage/like/:userEmail/write/:postId/:count', myPageController.myPageLikeMoreWrite);
+
+/**
+ *  @route GET /user/myPage/like/:userEmail/save/:postId/:count
+ *  @desc 마이페이지 무한스크롤 - 저장/작성
+ *  @access Public
+ */
+router.get('/myPage/like/:userEmail/save/:postId/:count', myPageController.myPageLikeMoreSave);
+
+/**
+ *  @route GET /user/myPage/new/:userEmail/write/:postId/:count
+ *  @desc 마이페이지 무한스크롤 - 저장/인기
+ *  @access Public
+ */
+router.get('/myPage/new/:userEmail/write/:postId', myPageController.myPageNewMoreWrite);
+
+/**
+ *  @route GET /user/myPage/new/:userEmail/save/:postId/:count
+ *  @desc 마이페이지 무한스크롤 - 저장/작성
+ *  @access Public
+ */
+router.get('/myPage/new/:userEmail/save/:postId', myPageController.myPageNewMoreSave);
+
 export default router;

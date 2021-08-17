@@ -130,6 +130,98 @@ export async function getLikeMyPage(userEmail: string) {
   }
 }
 
+export async function getLikeMoreWriteMyPage(userEmail: string, postId: string, count: string) {
+  try {
+    const writeQuery = `SELECT P.Id, P.title, P.image, P.region, P.theme, P.warning, 
+                    DATE_FORMAT(P.createdAt, '%Y-%m-%d') as date, count(countSave.PreviewId) as saveCount, count(countLike.PreviewId) as favoriteCount
+                    FROM (SELECT PostId FROM detail WHERE userEmail=:userEmail) as D
+                    INNER JOIN preview as P 
+                    LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id)
+                    LEFT OUTER JOIN savedPost as countSave ON(countSave.PreviewId = P.Id)
+                    WHERE D.PostId = P.Id
+                    GROUP BY P.Id 
+                    HAVING (count(countLike.PreviewId) = :count and P.Id < :postId) 
+                    ORDER BY favoriteCount DESC, P.Id DESC LIMIT 5`;
+
+    const result = await db.sequelize.query(writeQuery, {
+      type: QueryTypes.SELECT,
+      replacements: { userEmail: userEmail, count: parseInt(count), postId: parseInt(postId) },
+      raw: true,
+      nest: true,
+    });
+
+    const writeData = makePreview(result);
+
+    for (let temp of writeData.drive) {
+      temp['favoriteNum'] = result[0]['favoriteCount'];
+      temp['saveNum'] = result[0]['saveCount'];
+    }
+    return {
+      status: 200,
+      data: {
+        success: true,
+        msg: '마이페이지 작성/인기순 무한스크롤임다.',
+        data: writeData,
+      },
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      status: 502,
+      data: {
+        success: false,
+        msg: '마이페이지 무한스크롤 실패',
+      },
+    };
+  }
+}
+
+export async function getLikeMoreSaveMyPage(userEmail: string, postId: string, count: string) {
+  try {
+    const saveQuery = `SELECT P.Id, P.title, P.image, P.region, P.theme, P.warning, 
+                    DATE_FORMAT(P.createdAt, '%Y-%m-%d') as date, count(countSave.PreviewId) as saveCount, count(countLike.PreviewId) as favoriteCount
+                    FROM (SELECT PreviewId FROM savedPost WHERE UserEmail=:userEmail) as S
+                    INNER JOIN preview as P
+                    LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id)
+                    LEFT OUTER JOIN savedPost as countSave ON(countSave.PreviewId = P.Id)
+                    WHERE S.PreviewId = P.Id
+                    GROUP BY P.Id 
+                    HAVING (count(countLike.PreviewId) = :count and P.Id < :postId) 
+                    ORDER BY favoriteCount DESC, P.Id DESC LIMIT 3`;
+
+    const result = await db.sequelize.query(saveQuery, {
+      type: QueryTypes.SELECT,
+      replacements: { userEmail: userEmail, count: parseInt(count), postId: parseInt(postId) },
+      raw: true,
+      nest: true,
+    });
+
+    const saveData = makePreview(result);
+    for (let temp of saveData.drive) {
+      temp['favoriteNum'] = result[0]['favoriteCount'];
+      temp['saveNum'] = result[0]['saveCount'];
+    }
+
+    return {
+      status: 200,
+      data: {
+        success: true,
+        msg: '마이페이지 저장/인기순 무한스크롤임다.',
+        data: saveData,
+      },
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      status: 502,
+      data: {
+        success: false,
+        msg: '마이페이지 무한스크롤 실패',
+      },
+    };
+  }
+}
+
 export async function getNewMyPage(userEmail: string) {
   try {
     const writeQuery = `SELECT P.Id, P.title, P.image, P.region, P.theme, P.warning, 
@@ -250,6 +342,97 @@ export async function getNewMyPage(userEmail: string) {
       data: {
         success: false,
         msg: '마이페이지 최신순 실패',
+      },
+    };
+  }
+}
+
+export async function getNewMoreWriteMyPage(userEmail: string, postId: string) {
+  try {
+    const writeQuery = `SELECT P.Id, P.title, P.image, P.region, P.theme, P.warning, 
+                    DATE_FORMAT(P.createdAt, '%Y-%m-%d') as date, count(countSave.PreviewId) as saveCount, count(countLike.PreviewId) as favoriteCount
+                    FROM (SELECT PostId FROM detail WHERE userEmail=:userEmail) as D
+                    INNER JOIN preview as P 
+                    LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id)
+                    LEFT OUTER JOIN savedPost as countSave ON(countSave.PreviewId = P.Id)
+                    WHERE D.PostId = P.Id
+                    GROUP BY P.Id 
+                    HAVING P.Id < :postId
+                    ORDER BY P.Id DESC LIMIT 5`;
+
+    const result = await db.sequelize.query(writeQuery, {
+      type: QueryTypes.SELECT,
+      replacements: { userEmail: userEmail, postId: parseInt(postId) },
+      raw: true,
+      nest: true,
+    });
+
+    const writeData = makePreview(result);
+
+    for (let temp of writeData.drive) {
+      temp['favoriteNum'] = result[0]['favoriteCount'];
+      temp['saveNum'] = result[0]['saveCount'];
+    }
+
+    return {
+      status: 200,
+      data: {
+        success: true,
+        msg: '마이페이지 최신순/작성 무한스크롤이용',
+        data: writeData,
+      },
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      status: 502,
+      data: {
+        success: false,
+        msg: '마이페이지 무한스크롤 실패',
+      },
+    };
+  }
+}
+
+export async function getNewMoreSaveMyPage(userEmail: string, postId: string) {
+  try {
+    const saveQuery = `SELECT P.Id, P.title, P.image, P.region, P.theme, P.warning, 
+                    DATE_FORMAT(P.createdAt, '%Y-%m-%d') as date, count(countSave.PreviewId) as saveCount, count(countLike.PreviewId) as favoriteCount
+                    FROM (SELECT PreviewId FROM savedPost WHERE UserEmail=:userEmail) as S
+                    INNER JOIN preview as P
+                    LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id)
+                    LEFT OUTER JOIN savedPost as countSave ON(countSave.PreviewId = P.Id)
+                    WHERE S.PreviewId = P.Id
+                    GROUP BY P.Id ORDER BY P.Id DESC LIMIT 3`;
+
+    const result = await db.sequelize.query(saveQuery, {
+      type: QueryTypes.SELECT,
+      replacements: { userEmail: userEmail, postId: parseInt(postId) },
+      raw: true,
+      nest: true,
+    });
+
+    const saveData = makePreview(result);
+    for (let temp of saveData.drive) {
+      temp['favoriteNum'] = result[0]['favoriteCount'];
+      temp['saveNum'] = result[0]['saveCount'];
+    }
+
+    return {
+      status: 200,
+      data: {
+        success: true,
+        msg: '마이페이지 최신순/저장 무한스크롤이용',
+        data: saveData,
+      },
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      status: 502,
+      data: {
+        success: false,
+        msg: '마이페이지 무한스크롤 실패',
       },
     };
   }
