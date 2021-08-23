@@ -89,19 +89,11 @@ function parseCourse(data: object): courseDTO[] {
   };
   course.push(source);
 
-  if (data['wayOne']) {
+  if (data['wayPoint']) {
     const wayPoint: courseDTO = {
-      address: data['wayOne'],
-      latitude: data['wayOneLatitude'],
-      longitude: data['wayOneLongitude'],
-    };
-    course.push(wayPoint);
-  }
-  if (data['wayTwo']) {
-    const wayPoint: courseDTO = {
-      address: data['wayTwo'],
-      latitude: data['wayTwoLatitude'],
-      longitude: data['wayTwoLongitude'],
+      address: data['wayPoint'],
+      latitude: data['wayLatitude'],
+      longitude: data['wayLongitude'],
     };
     course.push(wayPoint);
   }
