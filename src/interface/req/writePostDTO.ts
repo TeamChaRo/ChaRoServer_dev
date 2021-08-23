@@ -24,13 +24,9 @@ export interface detailDTO {
   srcLongitude: string;
   srcLatitude: string;
 
-  wayOne: string;
-  wayOneLongitude: string;
-  wayOneLatitude: string;
-
-  wayTwo: string;
-  wayTwoLongitude: string;
-  wayTwoLatitude: string;
+  wayPoint: string;
+  wayLongitude: string;
+  wayLatitude: string;
 
   dest: string;
   destLongitude: string;

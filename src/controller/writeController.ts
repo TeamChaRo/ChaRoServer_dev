@@ -32,13 +32,9 @@ const writePost = async function (req: Request, res: Response) {
     srcLongitude: req.body.course[0]['longitude'],
     srcLatitude: req.body.course[0]['latitude'],
 
-    wayOne: req.body.course.length > 2 ? req.body.course[1]['address'] : '',
-    wayOneLongitude: req.body.course.length > 2 ? req.body.course[1]['longitude'] : '',
-    wayOneLatitude: req.body.course.length > 2 ? req.body.course[1]['latitude'] : '',
-
-    wayTwo: req.body.course.length > 3 ? req.body.course[2]['address'] : '',
-    wayTwoLongitude: req.body.course.length > 3 ? req.body.course[2]['longitude'] : '',
-    wayTwoLatitude: req.body.course.length > 3 ? req.body.course[2]['latitude'] : '',
+    wayPoint: req.body.course.length > 2 ? req.body.course[1]['address'] : '',
+    wayLongitude: req.body.course.length > 2 ? req.body.course[1]['longitude'] : '',
+    wayLatitude: req.body.course.length > 2 ? req.body.course[1]['latitude'] : '',
 
     dest: req.body.course[req.body.course.length - 1]['address'],
     destLongitude: req.body.course[req.body.course.length - 1]['longitude'],
