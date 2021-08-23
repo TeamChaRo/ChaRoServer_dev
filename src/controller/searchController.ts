@@ -1,5 +1,10 @@
 import { Request, Response } from 'express';
-import { getLikeSearch, getNewSearch } from '../service/searchService';
+import {
+  getLikeSearch,
+  getNewSearch,
+  getLikeMoreSearch,
+  getNewMoreSearch,
+} from '../service/searchService';
 import searchDTO from '../interface/req/searchDTO';
 
 /*
@@ -37,7 +42,6 @@ const searchLikePost = async function (req: Request, res: Response) {
   // 1개의 옵션 선택
   const option = parseOptions(region, theme, warning);
 
-  console.log('option!', option);
   const search: searchDTO = {
     region: region,
     theme: theme,
@@ -66,7 +70,43 @@ const searchNewPost = async function (req: Request, res: Response) {
   res.status(result.status).json(result.data);
 };
 
+const searchLikeMorePost = async function (req: Request, res: Response) {
+  const { region, theme, warning, userEmail, postId, count } = req.body;
+
+  // 1개의 옵션 선택
+  const option = parseOptions(region, theme, warning);
+
+  const search: searchDTO = {
+    region: region,
+    theme: theme,
+    warning: warning,
+    userEmail: userEmail,
+  };
+  const result = await getLikeMoreSearch(option, search, postId, count);
+
+  res.status(result.status).json(result.data);
+};
+
+const searchNewMorePost = async function (req: Request, res: Response) {
+  const { region, theme, warning, userEmail, postId } = req.body;
+
+  // 1개의 옵션 선택
+  const option = parseOptions(region, theme, warning);
+
+  const search: searchDTO = {
+    region: region,
+    theme: theme,
+    warning: warning,
+    userEmail: userEmail,
+  };
+  const result = await getNewMoreSearch(option, search, postId);
+
+  res.status(result.status).json(result.data);
+};
+
 export default {
   searchLikePost,
   searchNewPost,
+  searchLikeMorePost,
+  searchNewMorePost,
 };
