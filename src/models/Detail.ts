@@ -13,13 +13,9 @@ export default class Detail extends Model {
   public srcLongitude!: string;
   public srcLatitude!: string;
 
-  public wayOne!: string;
-  public wayOneLongitude!: string;
-  public wayOneLatitude!: string;
-
-  public wayTwo!: string;
-  public wayTwoLongitude!: string;
-  public wayTwoLatitude!: string;
+  public wayPoint!: string;
+  public wayLongitude!: string;
+  public wayLatitude!: string;
 
   public dest!: string;
   public destLongitude!: string;
@@ -88,22 +84,13 @@ Detail.init(
       type: DataTypes.STRING(20),
       allowNull: false,
     },
-    wayOne: {
+    wayPoint: {
       type: DataTypes.STRING(100),
     },
-    wayOneLongitude: {
+    wayLongitude: {
       type: DataTypes.STRING(20),
     },
-    wayOneLatitude: {
-      type: DataTypes.STRING(20),
-    },
-    wayTwo: {
-      type: DataTypes.STRING(100),
-    },
-    wayTwoLongitude: {
-      type: DataTypes.STRING(20),
-    },
-    wayTwoLatitude: {
+    wayLatitude: {
       type: DataTypes.STRING(20),
     },
     dest: {
