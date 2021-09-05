@@ -10,12 +10,21 @@ import Banner from './Banner';
 import Local from './Local';
 import CustomTheme from './CustomTheme';
 
+import Push from './Push';
+
 /* User - Preview(post) */
 User.hasMany(Detail, {
   foreignKey: 'UserEmail',
   sourceKey: 'email',
 });
 Detail.belongsTo(User, { foreignKey: 'UserEmail', targetKey: 'email' });
+
+/* User - Post */
+User.hasMany(Push, {
+  foreignKey: 'UserEmail',
+  sourceKey: 'email',
+});
+Push.belongsTo(User, { foreignKey: 'UserEmail', targetKey: 'email' });
 
 /* Preview - Detail */
 Preview.hasOne(Detail, {
@@ -65,4 +74,6 @@ export const db = {
   Banner,
   Local,
   CustomTheme,
+
+  Push,
 };
