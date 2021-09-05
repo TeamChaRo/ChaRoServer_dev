@@ -2,7 +2,12 @@ import express from 'express';
 import { check } from 'express-validator';
 const router = express.Router();
 
-import { loginController, registerController, myPageController } from '../controller';
+import {
+  loginController,
+  registerController,
+  myPageController,
+  utilController,
+} from '../controller';
 
 /**
  *  @route POST /user/register
@@ -117,4 +122,10 @@ router.get('/myPage/new/:userEmail/write/:postId', myPageController.myPageNewMor
  */
 router.get('/myPage/new/:userEmail/save/:postId', myPageController.myPageNewMoreSave);
 
+/**
+ *  @route POST /user/follow
+ *  @desc 유저 팔로우 / 팔로우 취소
+ *  @access Public
+ */
+router.post('/follow', utilController.follow);
 export default router;
