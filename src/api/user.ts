@@ -48,6 +48,13 @@ router.post(
   loginController.login
 );
 
+/**
+ *  @route POST /user/socialLogin
+ *  @desc 소셜 로그인
+ *  @access Public <- Private설정을 따로 할 수 있는가?
+ */
+router.post('/socialLogin', loginController.socialLogin);
+
 router.get('/myPage/like/:userEmail', myPageController.myPageLike);
 
 /**
