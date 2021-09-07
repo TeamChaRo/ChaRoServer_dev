@@ -12,6 +12,16 @@ const login = async function (req: Request, res: Response) {
   res.status(result.status).json(result.data);
 };
 
+/* social login */
+const socialLogin = async function (req: Request, res: Response) {
+  const { email } = req.body;
+
+  const result = await loginService.socialLogin(email);
+
+  res.status(result.status).json(result.data);
+};
+
 export default {
   login,
+  socialLogin,
 };
