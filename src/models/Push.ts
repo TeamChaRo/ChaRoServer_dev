@@ -5,6 +5,10 @@ export default class Push extends Model {
   public Id!: number;
   public isRead!: boolean;
 
+  public pushCode!: number;
+  public image!: string;
+  public token!: string;
+
   public createdAt!: Date;
 
   public static associations: {};
@@ -20,6 +24,17 @@ Push.init(
     isRead: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
+    },
+    pushCode: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    image: {
+      type: DataTypes.STRING(100),
+      defaultValue: '*',
+    },
+    token: {
+      type: DataTypes.STRING(50),
     },
     createdAt: {
       type: DataTypes.DATE,
