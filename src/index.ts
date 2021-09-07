@@ -5,8 +5,11 @@ import logger from 'morgan';
 import connectDB from './loaders/connect';
 import router from './api';
 
+import connectMQ from './loaders/mq';
+
 // connect with database
 connectDB();
+connectMQ();
 
 const app = express();
 
