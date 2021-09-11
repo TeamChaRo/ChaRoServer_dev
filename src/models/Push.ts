@@ -11,6 +11,9 @@ export default class Push extends Model {
 
   public createdAt!: Date;
 
+  public title!: string;
+  public body!: string;
+
   public static associations: {};
 }
 
@@ -39,6 +42,12 @@ Push.init(
     createdAt: {
       type: DataTypes.DATE,
       defaultValue: Sequelize.fn('now'),
+    },
+    title: {
+      type: DataTypes.STRING(10),
+    },
+    body: {
+      type: DataTypes.STRING(30),
     },
   },
   {
