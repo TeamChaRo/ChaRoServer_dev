@@ -19,6 +19,13 @@ User.hasMany(Detail, {
 });
 Detail.belongsTo(User, { foreignKey: 'UserEmail', targetKey: 'email' });
 
+/* User - Push */
+User.hasMany(Push, {
+  foreignKey: 'UserEmail',
+  sourceKey: 'email',
+});
+Push.belongsTo(User, { foreignKey: 'UserEmail', targetKey: 'email' });
+
 /* Preview - Detail */
 Preview.hasOne(Detail, {
   foreignKey: 'PostId',
