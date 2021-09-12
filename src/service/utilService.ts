@@ -1,6 +1,9 @@
 import { db } from '../models';
 import { QueryTypes } from 'sequelize';
 
+import sendMQ from '../utils/sendMQ';
+import { mqDTO } from '../interface/req/mqDTO';
+
 export async function doLike(userEmail: string, postId: string) {
   try {
     const query = 'SELECT * FROM likedPost WHERE UserEmail=:userEmail and PreviewId=:postId';
@@ -11,7 +14,7 @@ export async function doLike(userEmail: string, postId: string) {
     });
 
     if (result.length) {
-      const deleteLike = 'DELETE FROM likePost WHERE UserEmail= :userEmail and PreviewId= :postId';
+      const deleteLike = 'DELETE FROM likedPost WHERE UserEmail= :userEmail and PreviewId= :postId';
       db.sequelize.query(deleteLike, {
         type: QueryTypes.DELETE,
         replacements: { userEmail: userEmail, postId: postId },
@@ -24,6 +27,13 @@ export async function doLike(userEmail: string, postId: string) {
         replacements: { userEmail: userEmail, postId: postId },
         nest: true,
       });
+
+      const pushData: mqDTO = {
+        email: userEmail,
+        token: postId,
+      };
+
+      sendMQ('like', pushData);
     }
 
     return {
