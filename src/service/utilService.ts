@@ -128,6 +128,12 @@ export async function doFollow(follower: string, followed: string) {
         replacements: { follower: follower, followed: followed },
         nest: true,
       });
+
+      const pushData: mqDTO = {
+        email: follower,
+        token: followed,
+      };
+      sendMQ('following', pushData);
     }
 
     return {
