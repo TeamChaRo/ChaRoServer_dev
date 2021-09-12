@@ -21,12 +21,10 @@
   "dependencies": {
     "@types/multer-s3": "^2.7.10",
     "aws-sdk": "^2.938.0",
-    "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-validator": "^6.12.1",
-    "google-auth-library": "^7.4.1",
     "jsonwebtoken": "^8.5.1",
     "multer": "^1.4.3",
     "multer-s3": "^2.9.0",

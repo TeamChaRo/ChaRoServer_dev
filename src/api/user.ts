@@ -2,7 +2,12 @@ import express from 'express';
 import { check } from 'express-validator';
 const router = express.Router();
 
-import { loginController, registerController, myPageController } from '../controller';
+import {
+  loginController,
+  registerController,
+  myPageController,
+  utilController,
+} from '../controller';
 
 /**
  *  @route POST /user/register
@@ -44,42 +49,12 @@ router.post(
 );
 
 /**
- *  @route GET /user/login/google
- *  @desc 구글 소셜 로그인 -> 클라딴에서 해당 URL로 redirect시켜줘야함
- *  @access Public
+ *  @route POST /user/socialLogin
+ *  @desc 소셜 로그인
+ *  @access Public <- Private설정을 따로 할 수 있는가?
  */
-router.get('/login/google', function (req, res) {
-  res.redirect(loginController.googleURL);
-});
+router.post('/socialLogin', loginController.socialLogin);
 
-/**
- *  @route GET /user/login/google/callback
- *  @desc 구글 소셜 로그인 결과 반환(유저 정보 반환)
- *  @access Public
- */
-router.get('/login/google/callback', loginController.googleLogin);
-
-/**
- *  @route GET /user/login/kakao
- *  @desc 카카오 소셜 로그인 -> 클라딴에서 해당 URL로 redirect시켜줘야함
- *  @access Public
- */
-router.get('/login/kakao', function (req, res) {
-  res.redirect(loginController.kakaoURL);
-});
-
-/**
- *  @route GET /user/login/kakao/callback
- *  @desc 카카오 소셜 로그인 결과 반환(유저 정보 반환)
- *  @access Public
- */
-router.get('/login/kakao/callback', loginController.kakaoLogin);
-
-/**
- *  @route GET /user/myPage/like/:userEmail
- *  @desc 마이페이지 정보 반환 - 인기순
- *  @access Public
- */
 router.get('/myPage/like/:userEmail', myPageController.myPageLike);
 
 /**
@@ -117,4 +92,10 @@ router.get('/myPage/new/:userEmail/write/:postId', myPageController.myPageNewMor
  */
 router.get('/myPage/new/:userEmail/save/:postId', myPageController.myPageNewMoreSave);
 
+/**
+ *  @route POST /user/follow
+ *  @desc 유저 팔로우 / 팔로우 취소
+ *  @access Public
+ */
+router.post('/follow', utilController.follow);
 export default router;

@@ -88,3 +88,47 @@ export async function doSave(userEmail: string, postId: string) {
     };
   }
 }
+
+export async function doFollow(follower: string, followed: string) {
+  try {
+    const query = 'SELECT * FROM follow WHERE follower=:follower and followed=:followed';
+    const result = await db.sequelize.query(query, {
+      type: QueryTypes.SELECT,
+      replacements: { follower: follower, followed: followed },
+      nest: true,
+    });
+
+    if (result.length) {
+      const deleteFollow = 'DELETE FROM follow WHERE follower=:follower and followed=:followed';
+      db.sequelize.query(deleteFollow, {
+        type: QueryTypes.DELETE,
+        replacements: { follower: follower, followed: followed },
+        nest: true,
+      });
+    } else {
+      const addFollow = 'INSERT INTO follow(follower, followed) VALUES(:follower, :followed)';
+      db.sequelize.query(addFollow, {
+        type: QueryTypes.INSERT,
+        replacements: { follower: follower, followed: followed },
+        nest: true,
+      });
+    }
+
+    return {
+      status: 200,
+      data: {
+        success: true,
+        msg: '서버작 서버작~',
+      },
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      status: 502,
+      data: {
+        success: false,
+        msg: '유저 팔로우 실패',
+      },
+    };
+  }
+}
