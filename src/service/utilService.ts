@@ -7,6 +7,9 @@ import { modifyUserDTO } from '../interface/req/modifyUserDTO';
 
 import s3 from '../loaders/s3';
 
+import sendMQ from '../utils/sendMQ';
+import { mqDTO } from '../interface/req/mqDTO';
+
 export async function doLike(userEmail: string, postId: string) {
   try {
     const query = 'SELECT * FROM likedPost WHERE UserEmail=:userEmail and PreviewId=:postId';
@@ -30,6 +33,13 @@ export async function doLike(userEmail: string, postId: string) {
         replacements: { userEmail: userEmail, postId: postId },
         nest: true,
       });
+
+      const pushData: mqDTO = {
+        email: userEmail,
+        token: postId,
+      };
+
+      sendMQ('like', pushData);
     }
 
     return {
