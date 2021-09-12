@@ -15,6 +15,7 @@ export interface previewDTO {
 
 export interface detailDTO {
   PostId: number;
+  UserEmail: string;
   province: string;
   isParking: boolean;
   parkingDesc: string;

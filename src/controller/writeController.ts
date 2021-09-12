@@ -23,6 +23,7 @@ const writePost = async function (req: Request, res: Response) {
 
   const detail: detailDTO = {
     PostId: 0, //initial
+    UserEmail: req.body.userEmail,
     province: req.body.province,
     isParking: req.body.isParking,
     parkingDesc: req.body.parkingDesc,
