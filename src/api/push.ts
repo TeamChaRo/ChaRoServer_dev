@@ -18,6 +18,13 @@ router.post('/read', pushController.read);
 router.delete('/remove/:pushId', pushController.remove);
 
 /**
+ *  @route POST /push/fcm
+ *  @desc fcm 토큰 업데이트
+ *  @access Public
+ */
+router.post('/fcm', pushController.updateFcm);
+
+/**
  *  @route GET /push/:userEmail
  *  @desc push 삭제
  *  @access Public
