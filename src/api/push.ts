@@ -17,4 +17,11 @@ router.post('/read', pushController.read);
  */
 router.delete('/remove/:pushId', pushController.remove);
 
+/**
+ *  @route GET /push/:userEmail
+ *  @desc push 삭제
+ *  @access Public
+ */
+router.get('/:userEmail', pushController.getList);
+
 export default router;
