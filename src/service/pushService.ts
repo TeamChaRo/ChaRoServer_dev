@@ -50,6 +50,31 @@ export async function doRemove(pushId: number) {
   }
 }
 
+export async function doUpdateFcm(token: string, userEmail: string) {
+  try {
+    await db.User.update({ fcmToken: token }, { where: { email: userEmail } }).catch((err) => {
+      throw err;
+    });
+
+    return {
+      status: 200,
+      data: {
+        success: true,
+        msg: 'fcm 토큰 업데이트 했다 마... 오늘 스우파 하는 날이라 심장떨리는중 ',
+      },
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      status: 502,
+      data: {
+        success: false,
+        msg: 'push - fcm 토큰 업데이트 실패!',
+      },
+    };
+  }
+}
+
 export async function doGetList(userEmail: string) {
   try {
     return {
