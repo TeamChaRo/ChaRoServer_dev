@@ -49,3 +49,24 @@ export async function doRemove(pushId: number) {
     };
   }
 }
+
+export async function doGetList(userEmail: string) {
+  try {
+    return {
+      status: 200,
+      data: {
+        success: true,
+        msg: '암 투웨니 쓰리,, 난 수수껙끼,, question,,,? 모게요 맞춰봐용,,,',
+      },
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      status: 502,
+      data: {
+        success: false,
+        msg: 'push - 목록 가져오기 실패',
+      },
+    };
+  }
+}
