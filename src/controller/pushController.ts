@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { doRead, doRemove, doUpdateFcm } from '../service/pushService';
+import { doRead, doRemove, doUpdateFcm, doGetList } from '../service/pushService';
 
 const read = async function (req: Request, res: Response) {
   const { pushId } = req.body;
