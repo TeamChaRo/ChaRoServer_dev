@@ -24,3 +24,28 @@ export async function doRead(pushId: number) {
     };
   }
 }
+
+export async function doRemove(pushId: number) {
+  try {
+    await db.Push.destroy({ where: { Id: pushId } }).catch((err) => {
+      throw err;
+    });
+
+    return {
+      status: 200,
+      data: {
+        success: true,
+        msg: '삭제했다 삭제했어~ 야야야,, 지금 뭐해,,, 심심하면 나한테 연락 한번 혀,,',
+      },
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      status: 502,
+      data: {
+        success: false,
+        msg: 'push - 삭제 실패',
+      },
+    };
+  }
+}
