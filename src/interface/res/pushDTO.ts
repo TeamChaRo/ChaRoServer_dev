@@ -6,8 +6,9 @@ export default interface pushDTO {
   image: string;
   token: string;
 
-  date: string;
-
   title: string;
   body: string;
+
+  month: string;
+  day: string;
 }
