@@ -2,7 +2,7 @@ export default interface pushDTO {
   push_id: number;
   push_code: number;
 
-  isRead: boolean;
+  is_read: boolean;
   image: string;
   token: string;
 
