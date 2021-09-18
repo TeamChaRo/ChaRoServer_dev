@@ -117,4 +117,11 @@ router.post('/saveHistory', searchHistoryController.saveHistory);
  */
 router.get('/readHistory/:userEmail', searchHistoryController.readHistory);
 
+/**
+ *  @route GET /post/likes/:postId?userEmail
+ *  @desc 게시글 작성 시 출발/경유/목적 검색 기록 조회
+ *  @access Public
+ */
+router.get('/likes/:postId', utilController.getLikes);
+
 export default router;
