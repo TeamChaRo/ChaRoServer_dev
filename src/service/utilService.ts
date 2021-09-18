@@ -2,6 +2,7 @@ import { db } from '../models';
 import { QueryTypes } from 'sequelize';
 
 import { followDTO } from '../interface/res/followDTO';
+import { likesDTO } from '../interface/res/likesDTO';
 
 export async function doLike(userEmail: string, postId: string) {
   try {
@@ -194,4 +195,57 @@ export async function doGetFollow(userEmail: string) {
       },
     },
   };
+}
+
+export async function doGetLikes(userEmail: string, postId: string) {
+  try {
+    // 해당 포스트 아이디의 좋아요한사람들
+    // LEFT OUTER JOIN = 그 사람들을 userEmail이 follow하고 있는가?
+    const getLikes = `SELECT user.email, user.nickname, user.profileImage, B.follower as isFollow
+          FROM likedPost as A INNER JOIN user
+          LEFT OUTER JOIN follow as B on(B.followed = user.email and B.follower = :userEmail)
+          WHERE A.PreviewId = 1 and A.UserEmail = user.email`;
+
+    const likes = await db.sequelize
+      .query(getLikes, {
+        type: QueryTypes.SELECT,
+        replacements: { userEmail: userEmail },
+        nest: true,
+        raw: true,
+      })
+      .catch((err) => {
+        throw err;
+      });
+
+    const likesList: likesDTO[] = [];
+
+    for (let like of likes) {
+      const entity: followDTO = {
+        nickname: like['nickname'],
+        userEmail: like['email'],
+        image: like['profileImage'],
+        is_follow: like['isFollow'] ? true : false,
+      };
+
+      likesList.push(entity);
+    }
+
+    return {
+      status: 200,
+      data: {
+        success: true,
+        msg: '좋아요 리스트 조회~',
+        data: likesList,
+      },
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      status: 502,
+      data: {
+        success: false,
+        msg: '좋아요 목록 불러오기 실패',
+      },
+    };
+  }
 }
