@@ -99,6 +99,11 @@ router.get('/myPage/new/:userEmail/save/:postId', myPageController.myPageNewMore
  */
 router.post('/follow', utilController.follow);
 
-router.get('/followers', utilController.getFollowers);
+/**
+ *  @route GET /user/follow
+ *  @desc 유저의 팔로우/팔로잉 목록 조회
+ *  @access Public
+ */
+router.get('/follow', utilController.getFollowers);
 
 export default router;
