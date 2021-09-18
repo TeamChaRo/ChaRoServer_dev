@@ -98,4 +98,7 @@ router.get('/myPage/new/:userEmail/save/:postId', myPageController.myPageNewMore
  *  @access Public
  */
 router.post('/follow', utilController.follow);
+
+router.get('/followers', utilController.getFollowers);
+
 export default router;
