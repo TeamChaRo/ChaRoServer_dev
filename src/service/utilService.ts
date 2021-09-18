@@ -1,6 +1,8 @@
 import { db } from '../models';
 import { QueryTypes } from 'sequelize';
 
+import { followDTO } from '../interface/res/followDTO';
+
 export async function doLike(userEmail: string, postId: string) {
   try {
     const query = 'SELECT * FROM likedPost WHERE UserEmail=:userEmail and PreviewId=:postId';
@@ -131,4 +133,65 @@ export async function doFollow(follower: string, followed: string) {
       },
     };
   }
+}
+
+export async function doGetFollow(userEmail: string) {
+  //나를 팔로우 하고 있는 목록 + 해당 유저를 내가 팔로우하고 있는가 까지 체크
+  const getFollower = `SELECT A.email, A.nickname, A.profileImage, B.follower as isFollow
+          FROM (SELECT follow.follower, follow.followed, user.email, user.nickname, user.profileImage FROM follow INNER JOIN user WHERE follow.followed =:userEmail AND user.email = follow.follower) as A
+          LEFT OUTER JOIN follow as B on(B.follower = A.followed and B.followed = A.follower)`;
+
+  const followers = await db.sequelize.query(getFollower, {
+    type: QueryTypes.SELECT,
+    replacements: { userEmail: userEmail },
+    nest: true,
+    raw: true,
+  });
+
+  const getFollowing = `SELECT user.email, user.nickname, user.profileImage
+          FROM follow INNER JOIN user 
+          WHERE follow.follower = :userEmail AND user.email = follow.followed`;
+
+  const followings = await db.sequelize.query(getFollowing, {
+    type: QueryTypes.SELECT,
+    replacements: { userEmail: userEmail },
+    nest: true,
+    raw: true,
+  });
+
+  const follower: followDTO[] = [];
+  const following: followDTO[] = [];
+
+  for (let f of followers) {
+    const entity: followDTO = {
+      nickname: f['nickname'],
+      userEmail: f['email'],
+      image: f['profileImage'],
+      is_follow: f['isFollow'] ? true : false,
+    };
+
+    follower.push(entity);
+  }
+
+  for (let f of followings) {
+    const entity: followDTO = {
+      nickname: f['nickname'],
+      userEmail: f['email'],
+      image: f['profileImage'],
+      is_follow: true,
+    };
+
+    following.push(entity);
+  }
+  return {
+    status: 200,
+    data: {
+      success: true,
+      msg: '팔로워 리스트 조회~',
+      data: {
+        follower: follower,
+        following: following,
+      },
+    },
+  };
 }

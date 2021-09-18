@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { doLike, doSave, doFollow } from '../service/utilService';
+import { doLike, doSave, doFollow, doGetFollow } from '../service/utilService';
 const like = async function (req: Request, res: Response) {
   const { userEmail, postId } = req.body;
 
@@ -22,8 +22,16 @@ const follow = async function (req: Request, res: Response) {
   res.status(result.status).json(result.data);
 };
 
+const getFollowers = async function (req: Request, res: Response) {
+  const { userEmail } = req.query;
+
+  const result = await doGetFollow(userEmail as string);
+  res.status(result.status).json(result.data);
+};
+
 export default {
   like,
   save,
   follow,
+  getFollowers,
 };
