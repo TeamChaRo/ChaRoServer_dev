@@ -14,12 +14,12 @@ export async function getDetail(userEmail: string, postId: string) {
                     LEFT OUTER JOIN savedPost as isSave ON(isSave.PreviewId = P.PostId and isSave.UserEmail =:userEmail)
                     LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.PostId)
                     LEFT OUTER JOIN likedPost as isLike ON(isLike.PreviewId = P.PostId and isLike.UserEmail =:userEmail)
-                    WHERE user.email = P.UserEmail
+                    WHERE user.email = P.UserEmail and P.PostId = :postId
                     GROUP BY P.PostId`;
 
     const result = await db.sequelize.query(query, {
       type: QueryTypes.SELECT,
-      replacements: { userEmail: userEmail },
+      replacements: { userEmail: userEmail, postId: postId },
       raw: true,
       nest: true,
     });
@@ -35,7 +35,7 @@ export async function getDetail(userEmail: string, postId: string) {
       warnings: parseWarning(data),
 
       author: data['nickname'],
-      isAuthor: data['userEmail'] == userEmail ? true : false,
+      isAuthor: data['UserEmail'] == userEmail ? true : false,
       profileImage: data['profileImage'],
 
       likesCount: data['favoriteCount'],
