@@ -26,7 +26,7 @@ export function makePreview(result: object[]): previewDTO {
 
       region: result[idx]['region'],
       theme: result[idx]['theme'],
-      warning: result[idx]['warning'],
+      warning: result[idx]['warning'] ? result[idx]['warning'] : '',
 
       year: dateToken[0],
       month: dateToken[1],
