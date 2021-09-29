@@ -9,10 +9,10 @@ import { socialRegisterDTO } from '../interface/req/socialRegisterDTO';
 
 import registerService from '../service/registerService';
 const register = async function (req: Request, res: Response) {
-  const { email, userEmail, password, profileImage, nickname, pushAgree, emailAgree } = req.body;
+  const { userEmail, password, profileImage, nickname, pushAgree, emailAgree } = req.body;
 
   const user: registerDTO = {
-    email: email,
+    email: userEmail,
     password: password,
     profileImage: profileImage,
     nickname: nickname,
@@ -68,9 +68,9 @@ const authEmail = async function (req: Request, res: Response) {
 };
 
 const checkNickname = async function (req: Request, res: Response) {
-  const { nickanme } = req.params;
+  const { nickname } = req.params;
 
-  const result = await registerService.validateNickname(nickanme);
+  const result = await registerService.validateNickname(nickname);
   res.status(result.status).json(result.data);
 };
 
