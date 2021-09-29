@@ -17,7 +17,7 @@ import {
 router.post('/register', registerController.register);
 
 /**
- *  @route POST /user/register/email
+ *  @route POST /user/check/:userEmail
  *  @desc 이메일 중복 체크
  *  @access Public <- Private설정을 따로 할 수 있는가?
  */
@@ -28,7 +28,14 @@ router.get(
 );
 
 /**
- *  @route POST /user/register/nickname
+ *  @route POST /user/auth
+ *  @desc 이메일 인증(및 전송)
+ *  @access Public <- Private설정을 따로 할 수 있는가?
+ */
+router.post('/auth', registerController.authEmail);
+
+/**
+ *  @route POST /user/check/:nickname
  *  @desc 닉네임 중복 체크
  *  @access Public <- Private설정을 따로 할 수 있는가?
  */
