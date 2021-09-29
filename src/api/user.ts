@@ -62,6 +62,27 @@ router.post(
  */
 router.post('/socialLogin', loginController.socialLogin);
 
+/**
+ *  @route POST /user/register/kakao
+ *  @desc 카카오 소셜 회원가입
+ *  @access Public <- Private설정을 따로 할 수 있는가?
+ */
+router.post('/register/kakao', registerController.kakaoRegister);
+
+/**
+ *  @route POST /user/register/google
+ *  @desc 구글 소셜 회원가입
+ *  @access Public <- Private설정을 따로 할 수 있는가?
+ */
+router.post('/register/google', registerController.googleRegister);
+
+/**
+ *  @route POST /user/register/apple
+ *  @desc 애플 소셜 회원가입
+ *  @access Public <- Private설정을 따로 할 수 있는가?
+ */
+router.post('/register/apple', registerController.appleRegister);
+
 router.get('/myPage/like/:userEmail', myPageController.myPageLike);
 
 /**

@@ -102,10 +102,10 @@ const socialLogin = async function (email: string) {
 
     if (!user) {
       return {
-        status: 404,
+        status: 401,
         data: {
           success: false,
-          msg: '해당 유저가 없습니다. 가입부터 해주세요~',
+          msg: '해당 유저가 없습니다. 회원가입 API 요청해주세요!',
         },
       };
     }
@@ -118,7 +118,6 @@ const socialLogin = async function (email: string) {
         data: {
           email: user.email,
           nickname: user.nickname,
-          //token: await token(),
           profileImage: user.profileImage,
         },
       },
