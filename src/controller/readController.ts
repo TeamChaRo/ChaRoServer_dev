@@ -22,7 +22,7 @@ const readMain = async function (req: Request, res: Response) {
   const { userEmail } = req.params;
 
   // 임의 지정 theme, region
-  const result = await getMain(userEmail, 'summer', '부산');
+  const result = await getMain(userEmail, 'lake', '부산');
 
   return res.status(result.status).json(result.data);
 };
