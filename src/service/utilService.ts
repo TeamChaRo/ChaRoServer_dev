@@ -14,7 +14,7 @@ export async function doLike(userEmail: string, postId: string) {
     });
 
     if (result.length) {
-      const deleteLike = 'DELETE FROM likePost WHERE UserEmail= :userEmail and PreviewId= :postId';
+      const deleteLike = 'DELETE FROM likedPost WHERE UserEmail= :userEmail and PreviewId= :postId';
       db.sequelize.query(deleteLike, {
         type: QueryTypes.DELETE,
         replacements: { userEmail: userEmail, postId: postId },
