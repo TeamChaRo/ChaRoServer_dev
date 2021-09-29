@@ -5,6 +5,8 @@ import config from '../config/config';
 import transporter from '../loaders/smtp';
 
 import { registerDTO } from '../interface/req/registerDTO';
+import { socialRegisterDTO } from '../interface/req/socialRegisterDTO';
+
 import registerService from '../service/registerService';
 const register = async function (req: Request, res: Response) {
   const { email, userEmail, password, profileImage, nickname, pushAgree, emailAgree } = req.body;
@@ -72,9 +74,69 @@ const checkNickname = async function (req: Request, res: Response) {
   res.status(result.status).json(result.data);
 };
 
+const kakaoRegister = async function (req: Request, res: Response) {
+  const { userEmail, profileImage, nickname, pushAgree, emailAgree } = req.body;
+
+  const user: socialRegisterDTO = {
+    email: userEmail,
+    profileImage: profileImage ? profileImage : config.defaultImage,
+    nickname: nickname,
+    marketingPush: pushAgree,
+    marketingEmail: emailAgree,
+  };
+
+  const result = await registerService.socialRegister(user);
+  res.status(result.status).json(result.data);
+};
+
+const googleRegister = async function (req: Request, res: Response) {
+  const { userEmail, profileImage, pushAgree, emailAgree } = req.body;
+
+  /* min ~ max까지 랜덤으로 숫자를 생성하는 함수 */
+  var generateRandom = (min: number, max: number) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
+
+  const nickname: string = '상큼발랄' + generateRandom(1111, 9999).toString();
+  const user: socialRegisterDTO = {
+    email: userEmail,
+    profileImage: profileImage ? profileImage : config.defaultImage,
+    nickname: nickname,
+    marketingPush: pushAgree,
+    marketingEmail: emailAgree,
+  };
+
+  const result = await registerService.socialRegister(user);
+  res.status(result.status).json(result.data);
+};
+
+const appleRegister = async function (req: Request, res: Response) {
+  const { userEmail, pushAgree, emailAgree } = req.body;
+
+  /* min ~ max까지 랜덤으로 숫자를 생성하는 함수 */
+  var generateRandom = (min: number, max: number) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
+
+  const nickname: string = '둥기둥기' + generateRandom(1111, 9999).toString();
+  const user: socialRegisterDTO = {
+    email: userEmail,
+    profileImage: config.defaultImage,
+    nickname: nickname,
+    marketingPush: pushAgree,
+    marketingEmail: emailAgree,
+  };
+
+  const result = await registerService.socialRegister(user);
+  res.status(result.status).json(result.data);
+};
+
 export default {
   register,
   checkEmail,
   authEmail,
   checkNickname,
+  kakaoRegister,
+  googleRegister,
+  appleRegister,
 };
