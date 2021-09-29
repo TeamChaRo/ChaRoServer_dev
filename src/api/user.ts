@@ -17,22 +17,29 @@ import {
 router.post('/register', registerController.register);
 
 /**
- *  @route POST /user/register/email
+ *  @route POST /user/check/:userEmail
  *  @desc 이메일 중복 체크
  *  @access Public <- Private설정을 따로 할 수 있는가?
  */
-router.post(
-  '/register/email',
-  check('email', '이메일을 입력해주세요.').isEmail(),
+router.get(
+  '/check/:userEmail',
+  check('userEmail', '이메일을 입력해주세요.').isEmail(),
   registerController.checkEmail
 );
 
 /**
- *  @route POST /user/register/nickname
+ *  @route POST /user/auth
+ *  @desc 이메일 인증(및 전송)
+ *  @access Public <- Private설정을 따로 할 수 있는가?
+ */
+router.post('/auth', registerController.authEmail);
+
+/**
+ *  @route POST /user/check/:nickname
  *  @desc 닉네임 중복 체크
  *  @access Public <- Private설정을 따로 할 수 있는가?
  */
-router.post('/register/nickname', registerController.checkNickname);
+router.get('/check/:nickname', registerController.checkNickname);
 
 /**
  *  @route POST /user/login
