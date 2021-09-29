@@ -23,7 +23,7 @@ router.post('/register', registerController.register);
  */
 router.get(
   '/check/:userEmail',
-  check('email', '이메일을 입력해주세요.').isEmail(),
+  check('userEmail', '이메일을 입력해주세요.').isEmail(),
   registerController.checkEmail
 );
 
