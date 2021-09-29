@@ -35,7 +35,7 @@ const validateEmail = async function (email: string) {
     const user = await db.User.findOne({ where: { email: email } });
     if (user) {
       return {
-        status: 200,
+        status: 409,
         data: {
           success: false,
           msg: '유효하지 않은 이메일이에요!! 빠꾸쳐주세요!!!!!',
@@ -67,7 +67,7 @@ const validateNickname = async function (nickname: string) {
     const user = await db.User.findOne({ where: { nickname: nickname } });
     if (user) {
       return {
-        status: 200,
+        status: 409,
         data: {
           success: false,
           msg: '유효하지 않은 닉네임!! 빠꾸쳐주세요!!!!!',

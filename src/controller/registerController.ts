@@ -26,14 +26,14 @@ const checkEmail = async function (req: Request, res: Response) {
   if (!err.isEmpty()) {
     return res.status(404).json({ success: false, msg: '올바른 이메일 형식을 입력해주세요!' });
   }
-  const { email } = req.body;
+  const { userEmail } = req.params;
 
-  const result = await registerService.validateEmail(email);
+  const result = await registerService.validateEmail(userEmail);
   res.status(result.status).json(result.data);
 };
 
 const checkNickname = async function (req: Request, res: Response) {
-  const { nickanme } = req.body;
+  const { nickanme } = req.params;
 
   const result = await registerService.validateNickname(nickanme);
   res.status(result.status).json(result.data);
