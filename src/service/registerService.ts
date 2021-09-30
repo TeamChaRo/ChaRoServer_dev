@@ -1,5 +1,6 @@
 import { db } from '../models';
 import { registerDTO } from '../interface/req/registerDTO';
+import { socialRegisterDTO } from '../interface/req/socialRegisterDTO';
 import bcrypt from 'bcryptjs';
 
 const normalRegister = async function (user: registerDTO) {
@@ -35,7 +36,7 @@ const validateEmail = async function (email: string) {
     const user = await db.User.findOne({ where: { email: email } });
     if (user) {
       return {
-        status: 200,
+        status: 409,
         data: {
           success: false,
           msg: '유효하지 않은 이메일이에요!! 빠꾸쳐주세요!!!!!',
@@ -67,7 +68,7 @@ const validateNickname = async function (nickname: string) {
     const user = await db.User.findOne({ where: { nickname: nickname } });
     if (user) {
       return {
-        status: 200,
+        status: 409,
         data: {
           success: false,
           msg: '유효하지 않은 닉네임!! 빠꾸쳐주세요!!!!!',
@@ -93,8 +94,37 @@ const validateNickname = async function (nickname: string) {
   }
 };
 
+const socialRegister = async function (user: socialRegisterDTO) {
+  try {
+    const result = await db.User.create(user);
+
+    return {
+      status: 200,
+      data: {
+        success: true,
+        msg: '소셜로그인 가입 성공!',
+        data: {
+          email: result.email,
+          nickname: result.nickname,
+          profileImage: result.profileImage,
+        },
+      },
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      status: 502,
+      data: {
+        success: false,
+        msg: 'Register DB upload error',
+      },
+    };
+  }
+};
+
 export default {
   normalRegister,
   validateEmail,
   validateNickname,
+  socialRegister,
 };
