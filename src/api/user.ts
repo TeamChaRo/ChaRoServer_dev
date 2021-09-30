@@ -22,7 +22,7 @@ router.post('/register', registerController.register);
  *  @access Public <- Private설정을 따로 할 수 있는가?
  */
 router.get(
-  '/check/:userEmail',
+  '/check/email/:userEmail',
   check('userEmail', '이메일을 입력해주세요.').isEmail(),
   registerController.checkEmail
 );
@@ -39,7 +39,7 @@ router.post('/auth', registerController.authEmail);
  *  @desc 닉네임 중복 체크
  *  @access Public <- Private설정을 따로 할 수 있는가?
  */
-router.get('/check/:nickname', registerController.checkNickname);
+router.get('/check/nickname/:nickname', registerController.checkNickname);
 
 /**
  *  @route POST /user/login
