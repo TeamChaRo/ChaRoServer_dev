@@ -19,19 +19,18 @@ let upload = {
     limits: { fileSize: 5 * 1024 * 1024 },
   }).array('image', 6),
 
-  profileImage: (userEmail: string) =>
-    multer({
-      storage: multerS3({
-        s3: s3,
-        bucket: 'charo-server',
-        contentType: multerS3.AUTO_CONTENT_TYPE,
-        acl: 'public-read',
-        key: (req, file, cb) => {
-          cb(null, `user/${userEmail}${path.extname(file.originalname)}`);
-        },
-      }),
-      limits: { fileSize: 5 * 1024 * 1024 },
-    }).single('image'),
+  profileImage: multer({
+    storage: multerS3({
+      s3: s3,
+      bucket: 'charo-image',
+      contentType: multerS3.AUTO_CONTENT_TYPE,
+      acl: 'public-read',
+      key: (req, file, cb) => {
+        cb(null, `user/original/${Date.now().toString()}${path.extname(file.originalname)}`);
+      },
+    }),
+    limits: { fileSize: 5 * 1024 * 1024 },
+  }).single('image'),
 };
 
 export = upload;
