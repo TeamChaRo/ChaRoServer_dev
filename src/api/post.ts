@@ -6,6 +6,7 @@ import {
   utilController,
   writeController,
   searchHistoryController,
+  postController,
 } from '../controller';
 import upload from '../middleware/upload';
 
@@ -124,4 +125,10 @@ router.get('/readHistory/:userEmail', searchHistoryController.readHistory);
  */
 router.get('/likes/:postId', utilController.getLikes);
 
+/**
+ *  @route DELETE /post/delete/:postId
+ *  @desc 게시글 삭제
+ *  @access Public
+ */
+router.delete('/:postId', postController.deletePost);
 export default router;
