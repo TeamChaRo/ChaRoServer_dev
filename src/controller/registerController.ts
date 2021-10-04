@@ -9,19 +9,25 @@ import { socialRegisterDTO } from '../interface/req/socialRegisterDTO';
 
 import registerService from '../service/registerService';
 const register = async function (req: Request, res: Response) {
-  const { userEmail, password, profileImage, nickname, pushAgree, emailAgree } = req.body;
+  let profileImage: string;
+  if (req.file) {
+    profileImage = (req.file as Express.MulterS3.File).location;
+  } else {
+    return res.status(400).json({ msg: '이미지가 전달되지 않았습니다!' });
+  }
+
+  const { userEmail, password, nickname, pushAgree, emailAgree } = req.body;
 
   const user: registerDTO = {
     email: userEmail,
     password: password,
-    profileImage: profileImage,
+    profileImage: profileImage ? profileImage : config.defaultImage,
     nickname: nickname,
     marketingPush: pushAgree,
     marketingEmail: emailAgree,
   };
 
   const result = await registerService.normalRegister(user);
-
   res.status(result.status).json(result.data);
 };
 
