@@ -134,5 +134,5 @@ router.post('/follow', utilController.follow);
  */
 router.get('/follow', utilController.getFollowers);
 
-router.delete('/:userEmail');
+router.delete('/:userEmail', utilController.deleteUser);
 export default router;
