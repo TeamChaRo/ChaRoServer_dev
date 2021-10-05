@@ -249,3 +249,13 @@ export async function doGetLikes(userEmail: string, postId: string) {
     };
   }
 }
+
+export async function doDeleteUser(userEmail: string) {
+  return {
+    status: 200,
+    data: {
+      success: true,
+      msg: '유저 회원 탈퇴 성공',
+    },
+  };
+}

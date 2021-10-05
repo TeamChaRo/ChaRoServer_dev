@@ -1,5 +1,12 @@
 import { Request, Response } from 'express';
-import { doLike, doSave, doFollow, doGetFollow, doGetLikes } from '../service/utilService';
+import {
+  doLike,
+  doSave,
+  doFollow,
+  doGetFollow,
+  doGetLikes,
+  doDeleteUser,
+} from '../service/utilService';
 const like = async function (req: Request, res: Response) {
   const { userEmail, postId } = req.body;
 
@@ -37,6 +44,11 @@ const getLikes = async function (req: Request, res: Response) {
   res.status(result.status).json(result.data);
 };
 
+const deleteUser = async function (req: Request, res: Response) {
+  const { userEmail } = req.params;
+  const result = await doDeleteUser(userEmail as string);
+  res.status(result.status).json(result.data);
+};
 export default {
   like,
   save,
