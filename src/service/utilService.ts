@@ -4,6 +4,8 @@ import { QueryTypes } from 'sequelize';
 import { followDTO } from '../interface/res/followDTO';
 import { likesDTO } from '../interface/res/likesDTO';
 
+import s3 from '../loaders/s3';
+
 export async function doLike(userEmail: string, postId: string) {
   try {
     const query = 'SELECT * FROM likedPost WHERE UserEmail=:userEmail and PreviewId=:postId';
@@ -251,6 +253,44 @@ export async function doGetLikes(userEmail: string, postId: string) {
 }
 
 export async function doDeleteUser(userEmail: string) {
+  const result = await db.User.findOne({
+    where: { email: userEmail },
+    attributes: ['profileImage'],
+    raw: true,
+  }).catch((err) => {
+    return {
+      status: 500,
+      data: {
+        success: false,
+        msg: 'DB Error',
+      },
+    };
+  });
+
+  const imagePath: string = result['profileImage'];
+  if (imagePath.includes('default') == false) {
+    const key = imagePath.split('amazonaws.com/')[1];
+    s3.deleteObject(
+      {
+        Bucket: 'charo-image',
+        Key: key,
+      },
+      (err) => {
+        if (err) {
+          return {
+            status: 500,
+            data: {
+              success: false,
+              msg: 'S3 delete error',
+            },
+          };
+        }
+      }
+    );
+  }
+
+  db.User.destroy({ where: { email: userEmail } });
+
   return {
     status: 200,
     data: {
