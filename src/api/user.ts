@@ -2,6 +2,8 @@ import express from 'express';
 import { check } from 'express-validator';
 const router = express.Router();
 
+import upload from '../middleware/upload';
+
 import {
   loginController,
   registerController,
@@ -14,7 +16,7 @@ import {
  *  @desc 일반 회원가입
  *  @access Public <- Private설정을 따로 할 수 있는가?
  */
-router.post('/register', registerController.register);
+router.post('/register', upload.profileImage, registerController.register);
 
 /**
  *  @route POST /user/check/:userEmail
