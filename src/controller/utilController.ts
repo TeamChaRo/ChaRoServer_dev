@@ -6,7 +6,11 @@ import {
   doGetFollow,
   doGetLikes,
   doDeleteUser,
+  doModifyUser,
 } from '../service/utilService';
+
+import { modifyUserDTO } from '../interface/req/modifyUserDTO';
+
 const like = async function (req: Request, res: Response) {
   const { userEmail, postId } = req.body;
 
@@ -49,6 +53,21 @@ const deleteUser = async function (req: Request, res: Response) {
   const result = await doDeleteUser(userEmail as string);
   res.status(result.status).json(result.data);
 };
+
+const modifyUser = async function (req: Request, res: Response) {
+  const { userEmail } = req.params;
+  const { originImage, newNickname } = req.body;
+
+  // 멀티파트 오리지널 프로필 이미지 받아야함 -> 없을 땐 클라가 어떻게 처리할지는 고민,,
+  const data: modifyUserDTO = {
+    originImage: originImage,
+    newImage: 'temp image',
+    nickname: newNickname,
+  };
+  const result = await doModifyUser(userEmail, data);
+  res.status(result.status).json(result.data);
+};
+
 export default {
   like,
   save,
@@ -56,4 +75,5 @@ export default {
   getFollowers,
   getLikes,
   deleteUser,
+  modifyUser,
 };

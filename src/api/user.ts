@@ -142,4 +142,11 @@ router.get('/follow', utilController.getFollowers);
  *  @access Public
  */
 router.delete('/:userEmail', utilController.deleteUser);
+
+/**
+ *  @route PUT /user/:userEmail
+ *  @desc 회원 프로필 수정
+ *  @access Public
+ */
+router.put('/:userEmail', utilController.modifyUser);
 export default router;

@@ -3,6 +3,7 @@ import { QueryTypes } from 'sequelize';
 
 import { followDTO } from '../interface/res/followDTO';
 import { likesDTO } from '../interface/res/likesDTO';
+import { modifyUserDTO } from '../interface/req/modifyUserDTO';
 
 import s3 from '../loaders/s3';
 
@@ -296,6 +297,16 @@ export async function doDeleteUser(userEmail: string) {
     data: {
       success: true,
       msg: '유저 회원 탈퇴 성공',
+    },
+  };
+}
+
+export async function doModifyUser(userEmail: string, data: modifyUserDTO) {
+  return {
+    status: 200,
+    data: {
+      success: true,
+      msg: '유저 프로필 수정 성공~~ 지.호.예 파이팅 야야야!',
     },
   };
 }
