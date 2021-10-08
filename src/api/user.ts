@@ -136,5 +136,17 @@ router.post('/follow', utilController.follow);
  */
 router.get('/follow', utilController.getFollowers);
 
+/**
+ *  @route DELETE /user/:userEmail
+ *  @desc 회원 탈퇴
+ *  @access Public
+ */
 router.delete('/:userEmail', utilController.deleteUser);
+
+/**
+ *  @route PUT /user/:userEmail
+ *  @desc 회원 프로필 수정
+ *  @access Public
+ */
+router.put('/:userEmail', upload.profileImage, utilController.modifyUser);
 export default router;

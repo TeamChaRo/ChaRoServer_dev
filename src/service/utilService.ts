@@ -1,8 +1,9 @@
 import { db } from '../models';
-import { QueryTypes } from 'sequelize';
+import { QueryTypes, and } from 'sequelize';
 
 import { followDTO } from '../interface/res/followDTO';
 import { likesDTO } from '../interface/res/likesDTO';
+import { modifyUserDTO } from '../interface/req/modifyUserDTO';
 
 import s3 from '../loaders/s3';
 
@@ -296,6 +297,57 @@ export async function doDeleteUser(userEmail: string) {
     data: {
       success: true,
       msg: '유저 회원 탈퇴 성공',
+    },
+  };
+}
+
+export async function doModifyUser(userEmail: string, data: modifyUserDTO) {
+  try {
+    if (data.newImage) {
+      if (data.nickname) {
+        // 둘다 존재
+        db.User.update(
+          { profileImage: data.newImage, nickname: data.nickname },
+          { where: { email: userEmail } }
+        );
+      } else {
+        // 이미지만 존재
+        db.User.update({ profileImage: data.newImage }, { where: { email: userEmail } });
+      }
+
+      // 기존 이미지(originImage) 삭제
+      if (data.originImage.includes('default') == false) {
+        const key = data.originImage.split('amazonaws.com/')[1];
+        s3.deleteObject(
+          {
+            Bucket: 'charo-image',
+            Key: key,
+          },
+          (err) => {
+            if (err) {
+              throw err;
+            }
+          }
+        );
+      }
+    } else {
+      // 닉네임만 변경
+      db.User.update({ nickname: data.nickname }, { where: { email: userEmail } });
+    }
+  } catch (err) {
+    return {
+      status: 500,
+      data: {
+        success: false,
+        msg: '서버 에러입니당',
+      },
+    };
+  }
+  return {
+    status: 200,
+    data: {
+      success: true,
+      msg: '유저 프로필 수정 성공~~ 지.호.예 파이팅 야야야!',
     },
   };
 }
