@@ -148,5 +148,5 @@ router.delete('/:userEmail', utilController.deleteUser);
  *  @desc 회원 프로필 수정
  *  @access Public
  */
-router.put('/:userEmail', utilController.modifyUser);
+router.put('/:userEmail', upload.profileImage, utilController.modifyUser);
 export default router;
