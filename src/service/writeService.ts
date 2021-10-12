@@ -1,5 +1,8 @@
 import { db } from '../models';
 
+import sendMQ from '../utils/sendMQ';
+import { mqDTO } from '../interface/req/mqDTO';
+
 import { previewDTO, detailDTO } from '../interface/req/writePostDTO';
 export async function doWrite(preview: previewDTO, detail: detailDTO) {
   try {
@@ -14,6 +17,13 @@ export async function doWrite(preview: previewDTO, detail: detailDTO) {
     await db.Detail.create(detail).catch((err) => {
       throw err;
     });
+
+    const pushData: mqDTO = {
+      email: detail.UserEmail,
+      token: detail.PostId.toString(),
+    };
+
+    sendMQ('follow', pushData);
 
     return {
       status: 200,

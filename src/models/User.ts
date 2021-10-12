@@ -11,7 +11,7 @@ export default class User extends Model {
   public profileImage!: string;
   public marketingPush!: boolean;
   public marketingEmail!: boolean;
-
+  public fcmToken!: string;
   public static associations: {};
 }
 
@@ -44,6 +44,10 @@ User.init(
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false,
+    },
+    fcmToken: {
+      type: DataTypes.STRING(255),
+      defaultValue: '*',
     },
   },
   {
