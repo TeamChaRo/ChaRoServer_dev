@@ -9,7 +9,7 @@ import connectMQ from './loaders/mq';
 
 // connect with database
 connectDB();
-connectMQ();
+//connectMQ();
 
 const app = express();
 
