@@ -13,6 +13,8 @@ const writePost = async function (req: Request, res: Response) {
       imagesPath.push((file as Express.MulterS3.File).location);
       console.log((file as Express.MulterS3.File).location); // 테스트 후 지우기
     }
+  } else {
+    return res.status(400).json({ msg: '이미지가 전달되지 않았습니다!' });
   }
 
   const preview: previewDTO = {
