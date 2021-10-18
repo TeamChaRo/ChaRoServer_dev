@@ -131,4 +131,12 @@ router.get('/likes/:postId', utilController.getLikes);
  *  @access Public
  */
 router.delete('/:postId', postController.deletePost);
+
+/**
+ *  @route PUT /post
+ *  @desc 게시글 수정
+ *  @access Public
+ */
+
+router.put('/', postController.modifyPost);
 export default router;
