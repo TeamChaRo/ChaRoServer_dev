@@ -8,6 +8,7 @@ import {
   doDeleteUser,
   doModifyUser,
   doCheckPassword,
+  doModifyPassword,
 } from '../service/utilService';
 
 import { modifyUserDTO } from '../interface/req/modifyUserDTO';
@@ -60,7 +61,6 @@ const modifyUser = async function (req: Request, res: Response) {
   if (req.file) {
     newImage = (req.file as Express.MulterS3.File).location;
   }
-
   const { userEmail } = req.params;
   const { originImage, newNickname } = req.body;
 
@@ -79,6 +79,12 @@ const checkPassword = async function (req: Request, res: Response) {
   const result = await doCheckPassword(userEmail as string, password as string);
   res.status(result.status).json(result.data);
 };
+
+const modifyPassword = async function (req: Request, res: Response) {
+  const { userEmail, newPassword } = req.query;
+  const result = await doModifyPassword(userEmail as string, newPassword as string);
+  res.status(result.status).json(result.data);
+};
 export default {
   like,
   save,
@@ -88,4 +94,5 @@ export default {
   deleteUser,
   modifyUser,
   checkPassword,
+  modifyPassword,
 };

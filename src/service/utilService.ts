@@ -402,3 +402,18 @@ export async function doCheckPassword(userEmail: string, password: string) {
     },
   };
 }
+
+export async function doModifyPassword(userEmail: string, newPassword: string) {
+  const salt = await bcrypt.genSalt(10);
+  const passwordSalt = await bcrypt.hash(newPassword, salt);
+
+  db.User.update({ password: passwordSalt }, { where: { email: userEmail } });
+
+  return {
+    status: 200,
+    data: {
+      success: true,
+      msg: '비밀번호 변경이 완료되었습니다!',
+    },
+  };
+}
