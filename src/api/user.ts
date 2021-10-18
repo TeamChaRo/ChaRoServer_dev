@@ -149,4 +149,11 @@ router.delete('/:userEmail', utilController.deleteUser);
  *  @access Public
  */
 router.put('/:userEmail', upload.profileImage, utilController.modifyUser);
+
+/**
+ *  @route GET /user/password
+ *  @desc 유저 비밀번호 확인
+ *  @access Public
+ */
+router.get('/password', utilController.checkPassword);
 export default router;

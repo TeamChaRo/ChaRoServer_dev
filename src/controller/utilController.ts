@@ -7,6 +7,7 @@ import {
   doGetLikes,
   doDeleteUser,
   doModifyUser,
+  doCheckPassword,
 } from '../service/utilService';
 
 import { modifyUserDTO } from '../interface/req/modifyUserDTO';
@@ -73,6 +74,11 @@ const modifyUser = async function (req: Request, res: Response) {
   res.status(result.status).json(result.data);
 };
 
+const checkPassword = async function (req: Request, res: Response) {
+  const { userEmail, password } = req.query;
+  const result = await doCheckPassword(userEmail as string, password as string);
+  res.status(result.status).json(result.data);
+};
 export default {
   like,
   save,
@@ -81,4 +87,5 @@ export default {
   getLikes,
   deleteUser,
   modifyUser,
+  checkPassword,
 };

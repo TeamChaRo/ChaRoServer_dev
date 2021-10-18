@@ -10,6 +10,8 @@ import s3 from '../loaders/s3';
 import sendMQ from '../utils/sendMQ';
 import { mqDTO } from '../interface/req/mqDTO';
 
+import bcrypt from 'bcryptjs';
+
 export async function doLike(userEmail: string, postId: string) {
   try {
     const query = 'SELECT * FROM likedPost WHERE UserEmail=:userEmail and PreviewId=:postId';
@@ -364,6 +366,39 @@ export async function doModifyUser(userEmail: string, data: modifyUserDTO) {
     data: {
       success: true,
       msg: '유저 프로필 수정 성공~~ 지.호.예 파이팅 야야야!',
+    },
+  };
+}
+
+export async function doCheckPassword(userEmail: string, password: string) {
+  const user = await db.User.findOne({ where: { email: userEmail } });
+
+  if (!user) {
+    return {
+      status: 404,
+      data: {
+        success: false,
+        msg: '해당 유저가 없습니다.',
+      },
+    };
+  }
+
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    return {
+      status: 404,
+      data: {
+        success: false,
+        msg: '비밀번호가 일치하지 않습니다.',
+      },
+    };
+  }
+
+  return {
+    status: 200,
+    data: {
+      success: true,
+      msg: '올바른 비밀번호 입니다. 비밀번호 수정 API를 요청하시면 됩니다~',
     },
   };
 }
