@@ -137,6 +137,20 @@ router.post('/follow', utilController.follow);
 router.get('/follow', utilController.getFollowers);
 
 /**
+ *  @route GET /user/password
+ *  @desc 유저 비밀번호 확인
+ *  @access Public
+ */
+router.get('/password', utilController.checkPassword);
+
+/**
+ *  @route PUT /user/password
+ *  @desc 유저 비밀번호 수정
+ *  @access Public
+ */
+router.put('/password', utilController.modifyPassword);
+
+/**
  *  @route DELETE /user/:userEmail
  *  @desc 회원 탈퇴
  *  @access Public
@@ -149,4 +163,5 @@ router.delete('/:userEmail', utilController.deleteUser);
  *  @access Public
  */
 router.put('/:userEmail', upload.profileImage, utilController.modifyUser);
+
 export default router;
