@@ -124,7 +124,6 @@ export async function doUpdateFcm(token: string, userEmail: string) {
       data: {
         success: true,
         msg: 'fcm 토큰 업데이트 했다 마... 오늘 스우파 하는 날이라 심장떨리는중 ',
-        msg: '암 투웨니 쓰리,, 난 수수껙끼,, question,,,? 모게요 맞춰봐용,,,',
         pushList: pushes,
       },
     };

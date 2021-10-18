@@ -17,7 +17,7 @@ const connectMQ = async () => {
       conn.on('close', () => {
         console.log('[AMQP] reconnecting');
         setTimeout(() => {
-          this.connect((error, connection) => {
+          amqp.connect('amqp://127.0.0.1', (error, connection) => {
             if (error) {
               console.log('[AMQP] reconnecting failed');
             } else {

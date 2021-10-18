@@ -9,16 +9,25 @@ const writePost = async function (req: Request, res: Response) {
   // images path
   let imagesPath: string[] = [];
   if (req.files) {
-    for (let file of req.files as Express.MulterS3.File[])
+    for (let file of req.files as Express.MulterS3.File[]) {
       imagesPath.push((file as Express.MulterS3.File).location);
+      console.log((file as Express.MulterS3.File).location); // 테스트 후 지우기
+    }
   }
 
   const preview: previewDTO = {
     title: req.body.title,
     image: imagesPath[0],
     region: req.body.region,
-    theme: mapping.theme[req.body.theme[0]], //첫번쨰거 파싱
-    warning: req.body.warning ? mapping.warning[req.body.warning[0]] : '', // 첫번째거 파싱
+    theme:
+      typeof req.body.theme === 'string'
+        ? mapping.theme[req.body.theme]
+        : mapping.theme[req.body.theme[0]], //첫번쨰거 파싱
+    warning: req.body.warning
+      ? typeof req.body.warning === 'string'
+        ? mapping.warning[req.body.warning]
+        : mapping.theme[req.body.warning[0]]
+      : '', // 첫번째거 파싱
   };
 
   const detail: detailDTO = {
@@ -69,13 +78,21 @@ const writePost = async function (req: Request, res: Response) {
     hotPlace: false,
   };
 
-  req.body.theme.forEach((value: string) => {
-    detail[value] = true;
-  });
+  if (typeof req.body.theme === 'string') {
+    detail[req.body.theme] = true;
+  } else {
+    req.body.theme.forEach((value: string) => {
+      detail[value] = true;
+    });
+  }
 
-  req.body.warning.forEach((value: string) => {
-    detail[value] = true;
-  });
+  if (typeof req.body.warning === 'string') {
+    detail[req.body.warning] = true;
+  } else {
+    req.body.warning.forEach((value: string) => {
+      detail[value] = true;
+    });
+  }
 
   const result = await doWrite(preview, detail);
   res.status(result.status).json(result.data);
