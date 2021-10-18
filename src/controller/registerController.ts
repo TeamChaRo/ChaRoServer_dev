@@ -12,8 +12,6 @@ const register = async function (req: Request, res: Response) {
   let profileImage: string;
   if (req.file) {
     profileImage = (req.file as Express.MulterS3.File).location;
-  } else {
-    return res.status(400).json({ msg: '이미지가 전달되지 않았습니다!' });
   }
 
   const { userEmail, password, nickname, pushAgree, emailAgree } = req.body;

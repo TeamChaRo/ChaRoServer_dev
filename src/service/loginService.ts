@@ -28,6 +28,7 @@ const normalLogin = async function (email: string, password: string) {
             nickname: user.nickname,
             //token: await token(),
             profileImage: user.profileImage,
+            isSocial: false,
           },
         },
       };
@@ -119,6 +120,7 @@ const socialLogin = async function (email: string) {
           email: user.email,
           nickname: user.nickname,
           profileImage: user.profileImage,
+          isSocial: true,
         },
       },
     };
