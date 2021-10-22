@@ -157,26 +157,27 @@ export async function doFollow(follower: string, followed: string) {
   }
 }
 
-export async function doGetFollow(userEmail: string) {
-  //나를 팔로우 하고 있는 목록 + 해당 유저를 내가 팔로우하고 있는가 까지 체크
+// 팔로잉/팔로워 리스트의 소유 유저(myPageEmail)
+// 이를 볼 유저(userEmail)
+export async function doGetFollow(myPageEmail: string, userEmail: string) {
   const getFollower = `SELECT A.email, A.nickname, A.profileImage, B.follower as isFollow
-          FROM (SELECT follow.follower, follow.followed, user.email, user.nickname, user.profileImage FROM follow INNER JOIN user WHERE follow.followed =:userEmail AND user.email = follow.follower) as A
-          LEFT OUTER JOIN follow as B on(B.follower = A.followed and B.followed = A.follower)`;
+          FROM (SELECT follow.follower, follow.followed, user.email, user.nickname, user.profileImage FROM follow INNER JOIN user WHERE follow.followed =:myPageEmail AND user.email = follow.follower) as A
+          LEFT OUTER JOIN follow as B on(B.follower =:userEmail and B.followed = A.follower)`;
 
   const followers = await db.sequelize.query(getFollower, {
     type: QueryTypes.SELECT,
-    replacements: { userEmail: userEmail },
+    replacements: { userEmail: userEmail, myPageEmail: myPageEmail },
     nest: true,
     raw: true,
   });
 
-  const getFollowing = `SELECT user.email, user.nickname, user.profileImage
-          FROM follow INNER JOIN user 
-          WHERE follow.follower = :userEmail AND user.email = follow.followed`;
+  const getFollowing = `SELECT A.email, A.nickname, A.profileImage, B.followed as isFollow
+  FROM (SELECT follow.follower, follow.followed, user.email, user.nickname, user.profileImage FROM follow INNER JOIN user WHERE follow.follower =:myPageEmail AND user.email = follow.followed) as A
+  LEFT OUTER JOIN follow as B on(B.follower =:userEmail and B.followed = A.followed)`;
 
   const followings = await db.sequelize.query(getFollowing, {
     type: QueryTypes.SELECT,
-    replacements: { userEmail: userEmail },
+    replacements: { userEmail: userEmail, myPageEmail: myPageEmail },
     nest: true,
     raw: true,
   });
@@ -200,7 +201,7 @@ export async function doGetFollow(userEmail: string) {
       nickname: f['nickname'],
       userEmail: f['email'],
       image: f['profileImage'],
-      is_follow: true,
+      is_follow: f['isFollow'] ? true : false,
     };
 
     following.push(entity);

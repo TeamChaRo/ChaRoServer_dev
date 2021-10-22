@@ -36,9 +36,9 @@ const follow = async function (req: Request, res: Response) {
 };
 
 const getFollowers = async function (req: Request, res: Response) {
-  const { userEmail } = req.query;
+  const { userEmail, myPageEmail } = req.query;
 
-  const result = await doGetFollow(userEmail as string);
+  const result = await doGetFollow(myPageEmail as string, userEmail as string);
   res.status(result.status).json(result.data);
 };
 
