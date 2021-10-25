@@ -1,45 +1,35 @@
 import { db } from '../models';
+
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import config from '../config/config';
 
+import { loginDTO } from '../interface/res/loginDTO';
+
+import response from '../constants/response';
+import msg from '../constants/responseMessage';
+import code from '../constants/statusCode';
+
 const normalLogin = async function (email: string, password: string) {
   try {
-    const user = await db.User.findOne({ where: { email: email } });
+    const user = await db.User.findOne({ where: { email: email } }).catch((err) => {
+      throw err;
+    });
 
     if (!user) {
-      return {
-        status: 404,
-        data: {
-          success: false,
-          msg: '해당 유저가 없습니다.',
-        },
-      };
+      return response.fail(code.NOT_FOUND, msg.NO_USER);
     }
 
     if (user.password == password) {
-      return {
-        status: 200,
-        data: {
-          success: true,
-          msg: '로그인에 성공하였습니다.',
-          data: {
-            email: user.email,
-            nickname: user.nickname,
-            //token: await token(),
-            profileImage: user.profileImage,
-            isSocial: false,
-          },
-        },
+      const data: loginDTO = {
+        email: user.email,
+        nickname: user.nickname,
+        profileImage: user.profileImage,
+        isSocial: false,
       };
+      return response.success(code.OK, msg.LOGIN_SUCCESS, data);
     } else {
-      return {
-        status: 404,
-        data: {
-          success: false,
-          msg: '로그인 실패!',
-        },
-      };
+      return response.fail(code.NOT_FOUND, msg.LOGIN_FAIL);
     }
     /*
     //Encrpyt password
@@ -87,13 +77,7 @@ const normalLogin = async function (email: string, password: string) {
     */
   } catch (err) {
     console.log(err);
-    return {
-      status: 502,
-      data: {
-        success: false,
-        msg: 'DB error',
-      },
-    };
+    return response.fail(code.INTERNAL_SERVER_ERROR, msg.SERVER_ERROR);
   }
 };
 
@@ -102,37 +86,19 @@ const socialLogin = async function (email: string) {
     const user = await db.User.findOne({ where: { email: email } });
 
     if (!user) {
-      return {
-        status: 401,
-        data: {
-          success: false,
-          msg: '해당 유저가 없습니다. 회원가입 API 요청해주세요!',
-        },
-      };
+      return response.fail(code.NOT_FOUND, msg.NO_USER);
     }
 
-    return {
-      status: 200,
-      data: {
-        success: true,
-        msg: '로그인에 성공하였습니다.',
-        data: {
-          email: user.email,
-          nickname: user.nickname,
-          profileImage: user.profileImage,
-          isSocial: true,
-        },
-      },
+    const data: loginDTO = {
+      email: user.email,
+      nickname: user.nickname,
+      profileImage: user.profileImage,
+      isSocial: true,
     };
+    return response.success(code.OK, msg.LOGIN_SUCCESS, data);
   } catch (err) {
     console.log(err);
-    return {
-      status: 502,
-      data: {
-        success: false,
-        msg: '소셜 로그인 - 유저목록 불러오기 에러',
-      },
-    };
+    return response.fail(code.INTERNAL_SERVER_ERROR, msg.SERVER_ERROR);
   }
 };
 
