@@ -8,6 +8,11 @@ import { registerDTO } from '../interface/req/registerDTO';
 import { socialRegisterDTO } from '../interface/req/socialRegisterDTO';
 
 import registerService from '../service/registerService';
+
+import response from '../constants/response';
+import msg from '../constants/responseMessage';
+import code from '../constants/statusCode';
+
 const register = async function (req: Request, res: Response) {
   let profileImage: string;
   if (req.file) {
@@ -15,6 +20,11 @@ const register = async function (req: Request, res: Response) {
   }
 
   const { userEmail, password, nickname, pushAgree, emailAgree } = req.body;
+
+  if (!userEmail || !password || !nickname || !pushAgree || !emailAgree) {
+    const result = response.fail(code.BAD_REQUEST, msg.NULL_VALUE);
+    return res.status(result.status).json(result.data);
+  }
 
   const user: registerDTO = {
     email: userEmail,
@@ -37,12 +47,22 @@ const checkEmail = async function (req: Request, res: Response) {
 
   const { userEmail } = req.params;
 
+  if (!userEmail) {
+    const result = response.fail(code.BAD_REQUEST, msg.NULL_VALUE);
+    return res.status(result.status).json(result.data);
+  }
+
   const result = await registerService.validateEmail(userEmail);
   res.status(result.status).json(result.data);
 };
 
 const authEmail = async function (req: Request, res: Response) {
   const { userEmail } = req.body;
+
+  if (!userEmail) {
+    const result = response.fail(code.BAD_REQUEST, msg.NULL_VALUE);
+    return res.status(result.status).json(result.data);
+  }
 
   /* min ~ max까지 랜덤으로 숫자를 생성하는 함수 */
   var generateRandom = (min: number, max: number) => {
@@ -74,12 +94,22 @@ const authEmail = async function (req: Request, res: Response) {
 const checkNickname = async function (req: Request, res: Response) {
   const { nickname } = req.params;
 
+  if (!nickname) {
+    const result = response.fail(code.BAD_REQUEST, msg.NULL_VALUE);
+    return res.status(result.status).json(result.data);
+  }
+
   const result = await registerService.validateNickname(nickname);
   res.status(result.status).json(result.data);
 };
 
 const kakaoRegister = async function (req: Request, res: Response) {
   const { userEmail, profileImage, nickname, pushAgree, emailAgree } = req.body;
+
+  if (!userEmail || !nickname || !pushAgree || !emailAgree) {
+    const result = response.fail(code.BAD_REQUEST, msg.NULL_VALUE);
+    return res.status(result.status).json(result.data);
+  }
 
   const user: socialRegisterDTO = {
     email: userEmail,
@@ -95,6 +125,11 @@ const kakaoRegister = async function (req: Request, res: Response) {
 
 const googleRegister = async function (req: Request, res: Response) {
   const { userEmail, profileImage, pushAgree, emailAgree } = req.body;
+
+  if (!userEmail || !pushAgree || !emailAgree) {
+    const result = response.fail(code.BAD_REQUEST, msg.NULL_VALUE);
+    return res.status(result.status).json(result.data);
+  }
 
   /* min ~ max까지 랜덤으로 숫자를 생성하는 함수 */
   var generateRandom = (min: number, max: number) => {
@@ -116,6 +151,11 @@ const googleRegister = async function (req: Request, res: Response) {
 
 const appleRegister = async function (req: Request, res: Response) {
   const { userEmail, pushAgree, emailAgree } = req.body;
+
+  if (!userEmail || !pushAgree || !emailAgree) {
+    const result = response.fail(code.BAD_REQUEST, msg.NULL_VALUE);
+    return res.status(result.status).json(result.data);
+  }
 
   /* min ~ max까지 랜덤으로 숫자를 생성하는 함수 */
   var generateRandom = (min: number, max: number) => {
