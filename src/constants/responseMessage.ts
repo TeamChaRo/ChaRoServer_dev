@@ -6,4 +6,6 @@ export default {
   SERVER_ERROR: '서버 내부 오류입니다.',
   // Success
   LOGIN_SUCCESS: '로그인 성공',
+  DELETE_POST_SUCCESS: '게시글 삭제 성공',
+  MODIFY_POST_SUCCESS: '게시글 수정 성공',
 };

@@ -1,9 +1,12 @@
 import { db } from '../models';
-import { QueryTypes } from 'sequelize';
 
 import s3 from '../loaders/s3';
 
 import { previewDTO, detailDTO } from '../interface/req/writePostDTO';
+
+import response from '../constants/response';
+import msg from '../constants/responseMessage';
+import code from '../constants/statusCode';
 
 function deleteImages(images: string[]) {
   let params = {
@@ -28,22 +31,10 @@ export async function doDelete(postId: string, images: string[]) {
     db.Preview.destroy({ where: { Id: postId } });
   } catch (err) {
     console.log(err);
-    return {
-      status: 500,
-      data: {
-        success: false,
-        msg: 'SERVER Error',
-      },
-    };
+    return response.fail(code.INTERNAL_SERVER_ERROR, msg.SERVER_ERROR);
   }
 
-  return {
-    status: 200,
-    data: {
-      success: true,
-      msg: '삭제 성공!',
-    },
-  };
+  return response.nsuccess(code.OK, msg.DELETE_POST_SUCCESS);
 }
 
 export async function getImages(postId: string) {
@@ -83,20 +74,8 @@ export async function doModifyPost(
     db.Detail.update(detail, { where: { PostId: postId } });
   } catch (err) {
     console.log(err);
-    return {
-      status: 500,
-      data: {
-        success: false,
-        msg: '서버 에러 - 게시글 수정 실패',
-      },
-    };
+    return response.fail(code.INTERNAL_SERVER_ERROR, msg.SERVER_ERROR);
   }
 
-  return {
-    status: 200,
-    data: {
-      success: true,
-      msg: '게시글 수정 완뇨~~~~~~ >,<',
-    },
-  };
+  return response.nsuccess(code.OK, msg.MODIFY_POST_SUCCESS);
 }
