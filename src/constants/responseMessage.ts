@@ -8,4 +8,9 @@ export default {
   LOGIN_SUCCESS: '로그인 성공',
   DELETE_POST_SUCCESS: '게시글 삭제 성공',
   MODIFY_POST_SUCCESS: '게시글 수정 성공',
+
+  READ_PUSH_SUCCESS: 'push 조회 성공',
+  DELETE_PUSH_SUCCESS: 'push 삭제 성공',
+  READ_PUSHES_SUCCESS: 'push 리스트 조회 성공',
+  UPDATE_FCM_SUCCESS: 'FCM 토큰 업데이트 성공',
 };
