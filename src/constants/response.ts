@@ -9,6 +9,15 @@ export default {
       },
     };
   },
+  nsuccess: (status: number, msg: string) => {
+    return {
+      status,
+      data: {
+        success: true,
+        msg: msg,
+      },
+    };
+  },
   fail: (status: number, msg: string) => {
     return {
       status,
