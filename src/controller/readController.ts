@@ -16,10 +16,18 @@ import {
   getNewMoreLocal,
 } from '../service/previewService';
 import { getMain } from '../service/mainService';
-// userEmail 검사는.... 따로 빼야되는데, 사실?! 실제로는 이상한 아이디가 들어올 수 없지 않나.
+
+import response from '../constants/response';
+import msg from '../constants/responseMessage';
+import code from '../constants/statusCode';
 
 const readMain = async function (req: Request, res: Response) {
   const { userEmail } = req.params;
+
+  if (!userEmail) {
+    const result = response.fail(code.BAD_REQUEST, msg.NULL_VALUE);
+    return res.status(result.status).json(result.data);
+  }
 
   // 임의 지정 theme, region
   const result = await getMain(userEmail, 'lake', '부산');
@@ -28,6 +36,11 @@ const readMain = async function (req: Request, res: Response) {
 };
 const readPost = async function (req: Request, res: Response) {
   const { userEmail, postId } = req.params;
+
+  if (!userEmail || !postId) {
+    const result = response.fail(code.BAD_REQUEST, msg.NULL_VALUE);
+    return res.status(result.status).json(result.data);
+  }
 
   const result = await getDetail(userEmail, postId);
 
