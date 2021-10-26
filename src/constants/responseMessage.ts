@@ -32,4 +32,6 @@ export default {
   SAVE_SUCCESS: '게시글 저장하기 성공',
   FOLLOW_LIST_SUCCESS: '팔로잉/팔로워 리스트 조회 성공',
   LIKE_LIST_SUCCESS: '좋아요 리스트 조회 성공',
+
+  MAIN_SUCCESS: '메인뷰 조회 성공',
 };
