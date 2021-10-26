@@ -19,6 +19,7 @@ export default {
   VALID_PASSWORD: '비밀번호 체크 통과',
   MODIFY_PASSWORD_SUCCESS: '비밀번호 수정 성공',
 
+  CREATE_POST_SUCCESS: '게시글 작성 성공',
   DELETE_POST_SUCCESS: '게시글 삭제 성공',
   MODIFY_POST_SUCCESS: '게시글 수정 성공',
   READ_POST_SUCCESS: '게시글 조회 성공',

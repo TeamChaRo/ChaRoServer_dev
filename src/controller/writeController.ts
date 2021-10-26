@@ -5,50 +5,78 @@ import { previewDTO, detailDTO } from '../interface/req/writePostDTO';
 import { doWrite } from '../service/writeService';
 import mapping from '../service/mapping.json';
 
+import response from '../constants/response';
+import msg from '../constants/responseMessage';
+import code from '../constants/statusCode';
+
 const writePost = async function (req: Request, res: Response) {
   // images path
   let imagesPath: string[] = [];
   if (req.files) {
     for (let file of req.files as Express.MulterS3.File[]) {
       imagesPath.push((file as Express.MulterS3.File).location);
-      console.log((file as Express.MulterS3.File).location); // 테스트 후 지우기
     }
   }
 
+  const {
+    title,
+    region,
+    theme,
+    warning,
+    userEmail,
+    province,
+    isParking,
+    parkingDesc,
+    courseDesc,
+    course,
+  } = req.body;
+  if (
+    !userEmail ||
+    !title ||
+    !region ||
+    !theme ||
+    !warning ||
+    !province ||
+    !isParking ||
+    !parkingDesc ||
+    !courseDesc ||
+    !course
+  ) {
+    const result = response.fail(code.BAD_REQUEST, msg.NULL_VALUE);
+    return res.status(result.status).json(result.data);
+  }
+
   const preview: previewDTO = {
-    title: req.body.title,
+    title: title,
     image: imagesPath[0],
-    region: req.body.region,
-    theme:
-      typeof req.body.theme === 'string'
-        ? mapping.theme[req.body.theme]
-        : mapping.theme[req.body.theme[0]], //첫번쨰거 파싱
-    warning: req.body.warning
-      ? typeof req.body.warning === 'string'
-        ? mapping.warning[req.body.warning]
-        : mapping.theme[req.body.warning[0]]
+    region: region,
+    theme: typeof theme === 'string' ? mapping.theme[theme] : mapping.theme[theme[0]], //첫번쨰거 파싱
+    warning: warning
+      ? typeof warning === 'string'
+        ? mapping.warning[warning]
+        : mapping.theme[warning[0]]
       : '', // 첫번째거 파싱
   };
 
   const detail: detailDTO = {
     PostId: 0, //initial
-    UserEmail: req.body.userEmail,
-    province: req.body.province,
-    isParking: req.body.isParking,
-    parkingDesc: req.body.parkingDesc,
-    courseDesc: req.body.courseDesc,
+    UserEmail: userEmail,
+    province: province,
+    isParking: isParking,
+    parkingDesc: parkingDesc,
+    courseDesc: courseDesc,
 
-    src: req.body.course[0]['address'],
-    srcLongitude: req.body.course[0]['longitude'],
-    srcLatitude: req.body.course[0]['latitude'],
+    src: course[0]['address'],
+    srcLongitude: course[0]['longitude'],
+    srcLatitude: course[0]['latitude'],
 
-    wayPoint: req.body.course.length > 2 ? req.body.course[1]['address'] : '',
-    wayLongitude: req.body.course.length > 2 ? req.body.course[1]['longitude'] : '',
-    wayLatitude: req.body.course.length > 2 ? req.body.course[1]['latitude'] : '',
+    wayPoint: course.length > 2 ? course[1]['address'] : '',
+    wayLongitude: course.length > 2 ? course[1]['longitude'] : '',
+    wayLatitude: course.length > 2 ? course[1]['latitude'] : '',
 
-    dest: req.body.course[req.body.course.length - 1]['address'],
-    destLongitude: req.body.course[req.body.course.length - 1]['longitude'],
-    destLatitude: req.body.course[req.body.course.length - 1]['latitude'],
+    dest: course[course.length - 1]['address'],
+    destLongitude: course[course.length - 1]['longitude'],
+    destLatitude: course[course.length - 1]['latitude'],
 
     image1: imagesPath.length > 1 ? imagesPath[1] : '',
     image2: imagesPath.length > 2 ? imagesPath[2] : '',
@@ -78,18 +106,18 @@ const writePost = async function (req: Request, res: Response) {
     hotPlace: false,
   };
 
-  if (typeof req.body.theme === 'string') {
-    detail[req.body.theme] = true;
+  if (typeof theme === 'string') {
+    detail[theme] = true;
   } else {
-    req.body.theme.forEach((value: string) => {
+    theme.forEach((value: string) => {
       detail[value] = true;
     });
   }
 
-  if (typeof req.body.warning === 'string') {
-    detail[req.body.warning] = true;
+  if (typeof warning === 'string') {
+    detail[warning] = true;
   } else {
-    req.body.warning.forEach((value: string) => {
+    warning.forEach((value: string) => {
       detail[value] = true;
     });
   }
