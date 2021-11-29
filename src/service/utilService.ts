@@ -241,7 +241,7 @@ export async function doGetLikes(userEmail: string, postId: string) {
       likesList.push(entity);
     }
 
-    return response.success(code.OK, msg.LIKE_SUCCESS, likesList);
+    return response.success(code.OK, msg.LIKE_LIST_SUCCESS, likesList);
   } catch (err) {
     console.log(err);
     return response.fail(code.INTERNAL_SERVER_ERROR, msg.SERVER_ERROR);
