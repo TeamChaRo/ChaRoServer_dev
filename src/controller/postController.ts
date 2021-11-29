@@ -4,9 +4,19 @@ import { previewDTO, detailDTO } from '../interface/req/writePostDTO';
 import mapping from '../service/mapping.json';
 
 import { doDelete, getImages, doModifyPost } from '../service/postService';
+
+import response from '../constants/response';
+import msg from '../constants/responseMessage';
+import code from '../constants/statusCode';
+
 const deletePost = async (req: Request, res: Response) => {
   const { postId } = req.params;
   const { images } = req.body;
+
+  if (!postId || !images) {
+    const result = response.fail(code.BAD_REQUEST, msg.NULL_VALUE);
+    return res.status(result.status).json(result.data);
+  }
   const result = await doDelete(postId, images);
   return res.status(result.status).json(result.data);
 };
@@ -14,6 +24,11 @@ const deletePost = async (req: Request, res: Response) => {
 const modifyPost = async (req: Request, res: Response) => {
   const postId = req.body.postId;
   const deleted = req.body.deleted;
+
+  if (!postId) {
+    const result = response.fail(code.BAD_REQUEST, msg.NULL_VALUE);
+    return res.status(result.status).json(result.data);
+  }
 
   const images: string[] = await getImages(postId);
 

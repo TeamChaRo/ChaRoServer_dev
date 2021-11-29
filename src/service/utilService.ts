@@ -12,6 +12,10 @@ import { mqDTO } from '../interface/req/mqDTO';
 
 import bcrypt from 'bcryptjs';
 
+import response from '../constants/response';
+import msg from '../constants/responseMessage';
+import code from '../constants/statusCode';
+
 export async function doLike(userEmail: string, postId: string) {
   try {
     const query = 'SELECT * FROM likedPost WHERE UserEmail=:userEmail and PreviewId=:postId';
@@ -44,22 +48,10 @@ export async function doLike(userEmail: string, postId: string) {
       sendMQ('like', pushData);
     }
 
-    return {
-      status: 200,
-      data: {
-        success: true,
-        msg: '으쌰으쌰 차로파이팅', //"successfully liking the post",
-      },
-    };
+    return response.nsuccess(code.OK, msg.LIKE_SUCCESS);
   } catch (err) {
     console.log(err);
-    return {
-      status: 502,
-      data: {
-        success: false,
-        msg: '좋아요 디비 반영 실패',
-      },
-    };
+    return response.fail(code.INTERNAL_SERVER_ERROR, msg.SERVER_ERROR);
   }
 }
 
@@ -88,48 +80,48 @@ export async function doSave(userEmail: string, postId: string) {
       });
     }
 
-    return {
-      status: 200,
-      data: {
-        success: true,
-        msg: '으쌰으쌰 차로파이팅', //"successfully liking the post",
-      },
-    };
+    return response.nsuccess(code.OK, msg.SAVE_SUCCESS);
   } catch (err) {
     console.log(err);
-    return {
-      status: 502,
-      data: {
-        success: false,
-        msg: '좋아요 디비 반영 실패',
-      },
-    };
+    return response.fail(code.INTERNAL_SERVER_ERROR, msg.SERVER_ERROR);
   }
 }
 
 export async function doFollow(follower: string, followed: string) {
   try {
     const query = 'SELECT * FROM follow WHERE follower=:follower and followed=:followed';
-    const result = await db.sequelize.query(query, {
-      type: QueryTypes.SELECT,
-      replacements: { follower: follower, followed: followed },
-      nest: true,
-    });
+    const result = await db.sequelize
+      .query(query, {
+        type: QueryTypes.SELECT,
+        replacements: { follower: follower, followed: followed },
+        nest: true,
+      })
+      .catch((err) => {
+        throw err;
+      });
 
     if (result.length) {
       const deleteFollow = 'DELETE FROM follow WHERE follower=:follower and followed=:followed';
-      db.sequelize.query(deleteFollow, {
-        type: QueryTypes.DELETE,
-        replacements: { follower: follower, followed: followed },
-        nest: true,
-      });
+      db.sequelize
+        .query(deleteFollow, {
+          type: QueryTypes.DELETE,
+          replacements: { follower: follower, followed: followed },
+          nest: true,
+        })
+        .catch((err) => {
+          throw err;
+        });
     } else {
       const addFollow = 'INSERT INTO follow(follower, followed) VALUES(:follower, :followed)';
-      db.sequelize.query(addFollow, {
-        type: QueryTypes.INSERT,
-        replacements: { follower: follower, followed: followed },
-        nest: true,
-      });
+      db.sequelize
+        .query(addFollow, {
+          type: QueryTypes.INSERT,
+          replacements: { follower: follower, followed: followed },
+          nest: true,
+        })
+        .catch((err) => {
+          throw err;
+        });
 
       const pushData: mqDTO = {
         email: follower,
@@ -138,85 +130,82 @@ export async function doFollow(follower: string, followed: string) {
       sendMQ('following', pushData);
     }
 
-    return {
-      status: 200,
-      data: {
-        success: true,
-        msg: '서버작 서버작~',
-      },
-    };
+    return response.nsuccess(code.OK, msg.SAVE_SUCCESS);
   } catch (err) {
     console.log(err);
-    return {
-      status: 502,
-      data: {
-        success: false,
-        msg: '유저 팔로우 실패',
-      },
-    };
+    return response.fail(code.INTERNAL_SERVER_ERROR, msg.SERVER_ERROR);
   }
 }
 
 // 팔로잉/팔로워 리스트의 소유 유저(myPageEmail)
 // 이를 볼 유저(userEmail)
 export async function doGetFollow(myPageEmail: string, userEmail: string) {
-  const getFollower = `SELECT A.email, A.nickname, A.profileImage, B.follower as isFollow
-          FROM (SELECT follow.follower, follow.followed, user.email, user.nickname, user.profileImage FROM follow INNER JOIN user WHERE follow.followed =:myPageEmail AND user.email = follow.follower) as A
-          LEFT OUTER JOIN follow as B on(B.follower =:userEmail and B.followed = A.follower)`;
+  try {
+    const getFollower = `SELECT A.email, A.nickname, A.profileImage, B.follower as isFollow
+                          FROM (SELECT follow.follower, follow.followed, user.email, user.nickname, user.profileImage FROM follow INNER JOIN user WHERE follow.followed =:myPageEmail AND user.email = follow.follower) as A
+                          LEFT OUTER JOIN follow as B on(B.follower =:userEmail and B.followed = A.follower)`;
 
-  const followers = await db.sequelize.query(getFollower, {
-    type: QueryTypes.SELECT,
-    replacements: { userEmail: userEmail, myPageEmail: myPageEmail },
-    nest: true,
-    raw: true,
-  });
+    const getFollowing = `SELECT A.email, A.nickname, A.profileImage, B.followed as isFollow
+                          FROM (SELECT follow.follower, follow.followed, user.email, user.nickname, user.profileImage FROM follow INNER JOIN user WHERE follow.follower =:myPageEmail AND user.email = follow.followed) as A
+                          LEFT OUTER JOIN follow as B on(B.follower =:userEmail and B.followed = A.followed)`;
 
-  const getFollowing = `SELECT A.email, A.nickname, A.profileImage, B.followed as isFollow
-  FROM (SELECT follow.follower, follow.followed, user.email, user.nickname, user.profileImage FROM follow INNER JOIN user WHERE follow.follower =:myPageEmail AND user.email = follow.followed) as A
-  LEFT OUTER JOIN follow as B on(B.follower =:userEmail and B.followed = A.followed)`;
+    const followers = await db.sequelize
+      .query(getFollower, {
+        type: QueryTypes.SELECT,
+        replacements: { userEmail: userEmail, myPageEmail: myPageEmail },
+        nest: true,
+        raw: true,
+      })
+      .catch((err) => {
+        throw err;
+      });
 
-  const followings = await db.sequelize.query(getFollowing, {
-    type: QueryTypes.SELECT,
-    replacements: { userEmail: userEmail, myPageEmail: myPageEmail },
-    nest: true,
-    raw: true,
-  });
+    const followings = await db.sequelize
+      .query(getFollowing, {
+        type: QueryTypes.SELECT,
+        replacements: { userEmail: userEmail, myPageEmail: myPageEmail },
+        nest: true,
+        raw: true,
+      })
+      .catch((err) => {
+        throw err;
+      });
 
-  const follower: followDTO[] = [];
-  const following: followDTO[] = [];
+    const follower: followDTO[] = [];
+    const following: followDTO[] = [];
 
-  for (let f of followers) {
-    const entity: followDTO = {
-      nickname: f['nickname'],
-      userEmail: f['email'],
-      image: f['profileImage'],
-      is_follow: f['isFollow'] ? true : false,
-    };
+    for (let f of followers) {
+      const entity: followDTO = {
+        nickname: f['nickname'],
+        userEmail: f['email'],
+        image: f['profileImage'],
+        is_follow: f['isFollow'] ? true : false,
+      };
 
-    follower.push(entity);
+      follower.push(entity);
+    }
+
+    for (let f of followings) {
+      const entity: followDTO = {
+        nickname: f['nickname'],
+        userEmail: f['email'],
+        image: f['profileImage'],
+        is_follow: f['isFollow'] ? true : false,
+      };
+
+      following.push(entity);
+
+      const data = {
+        follower,
+        following,
+      };
+
+      return response.success(code.OK, msg.FOLLOW_LIST_SUCCESS, data);
+    }
+  } catch (err) {
+    console.log(err);
+    return response.fail(code.INTERNAL_SERVER_ERROR, msg.SERVER_ERROR);
   }
-
-  for (let f of followings) {
-    const entity: followDTO = {
-      nickname: f['nickname'],
-      userEmail: f['email'],
-      image: f['profileImage'],
-      is_follow: f['isFollow'] ? true : false,
-    };
-
-    following.push(entity);
-  }
-  return {
-    status: 200,
-    data: {
-      success: true,
-      msg: '팔로워 리스트 조회~',
-      data: {
-        follower: follower,
-        following: following,
-      },
-    },
-  };
 }
 
 export async function doGetLikes(userEmail: string, postId: string) {
@@ -252,72 +241,45 @@ export async function doGetLikes(userEmail: string, postId: string) {
       likesList.push(entity);
     }
 
-    return {
-      status: 200,
-      data: {
-        success: true,
-        msg: '좋아요 리스트 조회~',
-        data: likesList,
-      },
-    };
+    return response.success(code.OK, msg.LIKE_LIST_SUCCESS, likesList);
   } catch (err) {
     console.log(err);
-    return {
-      status: 502,
-      data: {
-        success: false,
-        msg: '좋아요 목록 불러오기 실패',
-      },
-    };
+    return response.fail(code.INTERNAL_SERVER_ERROR, msg.SERVER_ERROR);
   }
 }
 
 export async function doDeleteUser(userEmail: string) {
-  const result = await db.User.findOne({
-    where: { email: userEmail },
-    attributes: ['profileImage'],
-    raw: true,
-  }).catch((err) => {
-    return {
-      status: 500,
-      data: {
-        success: false,
-        msg: 'DB Error',
-      },
-    };
-  });
+  try {
+    const result = await db.User.findOne({
+      where: { email: userEmail },
+      attributes: ['profileImage'],
+      raw: true,
+    }).catch((err) => {
+      throw err;
+    });
 
-  const imagePath: string = result['profileImage'];
-  if (imagePath.includes('default') == false) {
-    const key = imagePath.split('amazonaws.com/')[1];
-    s3.deleteObject(
-      {
-        Bucket: 'charo-image',
-        Key: key,
-      },
-      (err) => {
-        if (err) {
-          return {
-            status: 500,
-            data: {
-              success: false,
-              msg: 'S3 delete error',
-            },
-          };
+    const imagePath: string = result['profileImage'];
+    if (imagePath.includes('default') == false) {
+      const key = imagePath.split('amazonaws.com/')[1];
+      s3.deleteObject(
+        {
+          Bucket: 'charo-image',
+          Key: key,
+        },
+        (err) => {
+          if (err) {
+            throw err;
+          }
         }
-      }
-    );
+      );
+    }
+
+    db.User.destroy({ where: { email: userEmail } });
+    return response.nsuccess(code.OK, msg.DELETE_POST_SUCCESS);
+  } catch (err) {
+    console.log(err);
+    return response.fail(code.INTERNAL_SERVER_ERROR, msg.SERVER_ERROR);
   }
-
-  db.User.destroy({ where: { email: userEmail } });
-
-  return {
-    status: 200,
-    data: {
-      success: true,
-      msg: '유저 회원 탈퇴 성공',
-    },
-  };
 }
 
 export async function doModifyUser(userEmail: string, data: modifyUserDTO) {
@@ -353,55 +315,24 @@ export async function doModifyUser(userEmail: string, data: modifyUserDTO) {
       // 닉네임만 변경
       db.User.update({ nickname: data.nickname }, { where: { email: userEmail } });
     }
+    return response.nsuccess(code.OK, msg.MODIFY_USER_SUCCESS);
   } catch (err) {
-    return {
-      status: 500,
-      data: {
-        success: false,
-        msg: '서버 에러입니당',
-      },
-    };
+    return response.fail(code.INTERNAL_SERVER_ERROR, msg.SERVER_ERROR);
   }
-  return {
-    status: 200,
-    data: {
-      success: true,
-      msg: '유저 프로필 수정 성공~~ 지.호.예 파이팅 야야야!',
-    },
-  };
 }
 
 export async function doCheckPassword(userEmail: string, password: string) {
   const user = await db.User.findOne({ where: { email: userEmail } });
 
   if (!user) {
-    return {
-      status: 404,
-      data: {
-        success: false,
-        msg: '해당 유저가 없습니다.',
-      },
-    };
+    return response.fail(code.NOT_FOUND, msg.NO_USER);
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    return {
-      status: 404,
-      data: {
-        success: false,
-        msg: '비밀번호가 일치하지 않습니다.',
-      },
-    };
+    return response.fail(code.NOT_FOUND, msg.UNVALID_PASSWORD);
   }
-
-  return {
-    status: 200,
-    data: {
-      success: true,
-      msg: '올바른 비밀번호 입니다. 비밀번호 수정 API를 요청하시면 됩니다~',
-    },
-  };
+  return response.nsuccess(code.OK, msg.VALID_PASSWORD);
 }
 
 export async function doModifyPassword(userEmail: string, newPassword: string) {
@@ -410,11 +341,5 @@ export async function doModifyPassword(userEmail: string, newPassword: string) {
 
   db.User.update({ password: passwordSalt }, { where: { email: userEmail } });
 
-  return {
-    status: 200,
-    data: {
-      success: true,
-      msg: '비밀번호 변경이 완료되었습니다!',
-    },
-  };
+  return response.nsuccess(code.OK, msg.MODIFY_PASSWORD_SUCCESS);
 }

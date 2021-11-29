@@ -5,6 +5,10 @@ import { detailDTO, courseDTO } from '../interface/res/detailDTO';
 
 import mapping from './mapping.json';
 
+import response from '../constants/response';
+import msg from '../constants/responseMessage';
+import code from '../constants/statusCode';
+
 export async function getDetail(userEmail: string, postId: string) {
   try {
     const query = `SELECT P.*, user.nickname, user.profileImage, 
@@ -45,23 +49,10 @@ export async function getDetail(userEmail: string, postId: string) {
       course: parseCourse(data),
     };
 
-    return {
-      status: 200,
-      data: {
-        success: true,
-        msg: '오예원 힘내자', //"successfully load Today's preview sorted by date",
-        data: detail,
-      },
-    };
+    return response.success(code.OK, msg.READ_POST_SUCCESS, detail);
   } catch (err) {
     console.log(err);
-    return {
-      status: 502,
-      data: {
-        success: false,
-        msg: '게시글 상세정보 읽어오기 실패',
-      },
-    };
+    return response.fail(code.INTERNAL_SERVER_ERROR, msg.SERVER_ERROR);
   }
 }
 

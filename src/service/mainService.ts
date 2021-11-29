@@ -4,6 +4,10 @@ import { QueryTypes } from 'sequelize';
 import { mainDTO, bannerDTO } from '../interface/res/mainDTO';
 import { makePreview } from './makePreview';
 
+import response from '../constants/response';
+import msg from '../constants/responseMessage';
+import code from '../constants/statusCode';
+
 export async function getMain(userEmail: string, theme: string, region: string) {
   try {
     const bannerPromise = db.Banner.findAll({ limit: 4, raw: true, nest: true });
@@ -92,47 +96,38 @@ export async function getMain(userEmail: string, theme: string, region: string) 
       themePromise,
       localPromise,
       todayPromise,
-    ]).then((result) => {
-      let banner: bannerDTO[] = [];
-      const bannerResult: any = result[0]; // banner
+    ])
+      .then((result) => {
+        let banner: bannerDTO[] = [];
+        const bannerResult: any = result[0]; // banner
 
-      for (let idx in bannerResult) {
-        const tempBanner: bannerDTO = {
-          bannerTitle: bannerResult[idx]['bannerTitle'],
-          bannerImage: bannerResult[idx]['bannerImage'],
-          bannerTag: bannerResult[idx]['bannerTag'],
+        for (let idx in bannerResult) {
+          const tempBanner: bannerDTO = {
+            bannerTitle: bannerResult[idx]['bannerTitle'],
+            bannerImage: bannerResult[idx]['bannerImage'],
+            bannerTag: bannerResult[idx]['bannerTag'],
+          };
+          banner.push(tempBanner);
+        }
+
+        // initialize MAIN
+        main = {
+          banner: banner,
+          todayCharoDrive: makePreview(result[5]),
+          trendDrive: makePreview(result[2]),
+          customTitle: result[1][0]['customThemeTitle'],
+          customDrive: makePreview(result[3]),
+          localTitle: result[1][0]['localTitle'],
+          localDrive: makePreview(result[4]),
         };
-        banner.push(tempBanner);
-      }
+      })
+      .catch((err) => {
+        throw err;
+      });
 
-      // initialize MAIN
-      main = {
-        banner: banner,
-        todayCharoDrive: makePreview(result[5]),
-        trendDrive: makePreview(result[2]),
-        customTitle: result[1][0]['customThemeTitle'],
-        customDrive: makePreview(result[3]),
-        localTitle: result[1][0]['localTitle'],
-        localDrive: makePreview(result[4]),
-      };
-    });
-
-    return {
-      status: 200,
-      data: {
-        success: true,
-        msg: '오늘은 8월 10일 요 새로운 서버는 연결을 언제하자하는게 좋을까? 눈난뇨',
-        data: main,
-      },
-    };
+    return response.success(code.OK, msg.MAIN_SUCCESS, main);
   } catch (err) {
     console.log(err);
-    return {
-      status: 502,
-      data: {
-        success: false,
-        msg: '메인뷰 조회 실패',
-      },
-    };
+    return response.fail(code.INTERNAL_SERVER_ERROR, msg.SERVER_ERROR);
   }
 }
