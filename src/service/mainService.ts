@@ -3,6 +3,7 @@ import { QueryTypes } from 'sequelize';
 
 import { mainDTO, bannerDTO } from '../interface/res/mainDTO';
 import { makePreview } from './makePreview';
+import mapping from './mapping.json';
 
 import response from '../constants/response';
 import msg from '../constants/responseMessage';
@@ -39,13 +40,13 @@ export async function getMain(userEmail: string, theme: string, region: string) 
 
     //custom 된 테마 게시글 모아오기
     const themeQuery = `SELECT P.Id, P.title, P.image, P.region, P.theme, P.warning, 
-                                DATE_FORMAT(P.createdAt, '%Y-%m-%d') as date, count(isLike.PreviewId) as isFavorite, count(countLike.PreviewId) as favoriteCount
-                                FROM preview as P
-                                INNER JOIN detail 
-                                LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id)
-                                LEFT OUTER JOIN likedPost as isLike ON(isLike.PreviewId = P.Id and isLike.UserEmail =:userEmail)
-                                WHERE detail.PostId=P.Id and detail.${theme}= 1
-                                GROUP BY P.Id ORDER BY favoriteCount DESC LIMIT 4`;
+                      DATE_FORMAT(P.createdAt, '%Y-%m-%d') as date, count(isLike.PreviewId) as isFavorite, count(countLike.PreviewId) as favoriteCount
+                      FROM preview as P
+                      INNER JOIN detail 
+                      LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id)
+                      LEFT OUTER JOIN likedPost as isLike ON(isLike.PreviewId = P.Id and isLike.UserEmail =:userEmail)
+                      WHERE detail.PostId=P.Id and detail.${theme}= 1
+                      GROUP BY P.Id ORDER BY favoriteCount DESC LIMIT 4`;
 
     const themePromise = db.sequelize.query(themeQuery, {
       type: QueryTypes.SELECT,
@@ -71,18 +72,35 @@ export async function getMain(userEmail: string, theme: string, region: string) 
       nest: true,
     });
 
+    const tempQuery = `SELECT p.theme, count(p.theme) AS num_theme
+                        FROM preview AS p
+                        JOIN savedPost AS s
+                        WHERE s.PreviewId = p.Id
+                        GROUP BY p.theme
+                        ORDER BY num_theme DESC, p.theme ASC`;
+    
+    let maxThemeResult = await db.sequelize.query(tempQuery, {
+      type: QueryTypes.SELECT,
+      raw: true,
+      nest: true,
+    });
+    
+    let maxTheme : string = maxThemeResult.length > 0 ? maxThemeResult[0]['theme'] : theme;
+    maxTheme = mapping.reverseTheme[maxTheme];
+    
+    // 저장 게시물 중에서 가장 많이 저장된 태그
     const todayQuery = `SELECT P.Id, P.title, P.image, P.region, P.theme, P.warning, 
-                                DATE_FORMAT(P.createdAt, '%Y-%m-%d') as date, count(isLike.PreviewId) as isFavorite, count(countLike.PreviewId) as favoriteCount
-                                FROM preview as P
-                                INNER JOIN detail
-                                LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id) 
-                                LEFT OUTER JOIN likedPost as isLike ON(isLike.PreviewId = P.Id and isLike.UserEmail =:userEmail)
-                                WHERE P.region =:region
-                                GROUP BY P.Id ORDER BY favoriteCount DESC LIMIT 4`;
+                        DATE_FORMAT(P.createdAt, '%Y-%m-%d') as date, count(isLike.PreviewId) as isFavorite, count(countLike.PreviewId) as favoriteCount
+                        FROM preview as P
+                        INNER JOIN detail 
+                        LEFT OUTER JOIN likedPost as countLike ON(countLike.PreviewId = P.Id)
+                        LEFT OUTER JOIN likedPost as isLike ON(isLike.PreviewId = P.Id and isLike.UserEmail =:userEmail)
+                        WHERE detail.PostId=P.Id and detail.${maxTheme}= 1
+                        GROUP BY P.Id ORDER BY favoriteCount DESC LIMIT 4`;
 
     const todayPromise = db.sequelize.query(todayQuery, {
       type: QueryTypes.SELECT,
-      replacements: { userEmail: userEmail, region: region },
+      replacements: { userEmail: userEmail },
       raw: true,
       nest: true,
     });
