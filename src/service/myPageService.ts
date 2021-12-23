@@ -100,8 +100,8 @@ export async function getLikeMyPage(userEmail: string) {
       const userInfo: myPageUser = {
         nickname: user['nickname'],
         profileImage: user['profileImage'],
-        following: follow['following'],
-        follower: follwer['follower'],
+        following: follwer['follower'],
+        follower: follow['following'],
       };
 
       myPage = {
@@ -311,14 +311,16 @@ export async function getNewMyPage(userEmail: string) {
         temp['saveNum'] = result[1][0]['saveCount'];
       }
 
+      // 팔로워 - 나를 팔로우 하는 사람들
+      // 팔로잉 - 내가 팔로우 하는 것
       const follow = result[2][0];
       const follwer = result[3][0];
       const user = result[4][0];
       const userInfo: myPageUser = {
         nickname: user['nickname'],
         profileImage: user['profileImage'],
-        following: follow['following'],
-        follower: follwer['follower'],
+        following: follwer['follower'],
+        follower: follow['following'],
       };
 
       myPage = {
