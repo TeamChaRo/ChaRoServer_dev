@@ -130,7 +130,7 @@ export async function doFollow(follower: string, followed: string) {
       sendMQ('following', pushData);
     }
 
-    return response.nsuccess(code.OK, msg.SAVE_SUCCESS);
+    return response.nsuccess(code.OK, msg.FOLLOW_SUCCESS);
   } catch (err) {
     console.log(err);
     return response.fail(code.INTERNAL_SERVER_ERROR, msg.SERVER_ERROR);
