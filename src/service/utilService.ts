@@ -141,6 +141,7 @@ export async function doFollow(follower: string, followed: string) {
 // 이를 볼 유저(userEmail)
 export async function doGetFollow(myPageEmail: string, userEmail: string) {
   try {
+    
     const getFollower = `SELECT A.email, A.nickname, A.profileImage, B.follower as isFollow
                           FROM (SELECT follow.follower, follow.followed, user.email, user.nickname, user.profileImage FROM follow INNER JOIN user WHERE follow.followed =:myPageEmail AND user.email = follow.follower) as A
                           LEFT OUTER JOIN follow as B on(B.follower =:userEmail and B.followed = A.follower)`;
@@ -195,13 +196,15 @@ export async function doGetFollow(myPageEmail: string, userEmail: string) {
 
       following.push(entity);
 
-      const data = {
-        follower,
-        following,
-      };
+      
 
-      return response.success(code.OK, msg.FOLLOW_LIST_SUCCESS, data);
     }
+    const data = {
+      follower,
+      following,
+    };
+    
+    return response.success(code.OK, msg.FOLLOW_LIST_SUCCESS, data);
   } catch (err) {
     console.log(err);
     return response.fail(code.INTERNAL_SERVER_ERROR, msg.SERVER_ERROR);
