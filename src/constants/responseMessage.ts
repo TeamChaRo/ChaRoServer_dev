@@ -31,6 +31,7 @@ export default {
 
   LIKE_SUCCESS: '게시글 좋아요 성공',
   SAVE_SUCCESS: '게시글 저장하기 성공',
+  FOLLOW_SUCCESS: '팔로우하기 성공',
   FOLLOW_LIST_SUCCESS: '팔로잉/팔로워 리스트 조회 성공',
   LIKE_LIST_SUCCESS: '좋아요 리스트 조회 성공',
 
