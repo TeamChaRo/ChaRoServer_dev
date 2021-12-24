@@ -34,6 +34,7 @@ export default {
   FOLLOW_SUCCESS: '팔로우하기 성공',
   FOLLOW_LIST_SUCCESS: '팔로잉/팔로워 리스트 조회 성공',
   LIKE_LIST_SUCCESS: '좋아요 리스트 조회 성공',
+  GET_IS_FOLLOW_SUCCESS: '팔로우 여부 조회 성공',
 
   MAIN_SUCCESS: '메인뷰 조회 성공',
 };
