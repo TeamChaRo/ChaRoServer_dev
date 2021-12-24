@@ -147,6 +147,38 @@ export async function doFollow(follower: string, followed: string) {
   }
 }
 
+export async function doGetIsFollow(targetEmail: string, userEmail: string) {
+  const getIsFollowing = `SELECT F.followed
+                          FROM follow as F
+                          WHERE F.followed=:userEmail and F.follower=:targetEmail`;
+  
+  try{
+
+    let isFollow:boolean;
+
+    const result = await db.sequelize
+      .query(getIsFollowing, {
+        type: QueryTypes.SELECT,
+        replacements: { targetEmail: targetEmail, userEmail: userEmail },
+        nest: true,
+      })
+      .catch((err) => {
+        throw err;
+      });
+
+    if (result.length) isFollow = true;
+    else isFollow = false;
+
+    const data: isFollowDTO = {
+      isFollow
+    }
+
+    return response.success(code.OK, msg.GET_IS_FOLLOW_SUCCESS, data);
+  }catch(err){
+    console.log(err);
+    return response.fail(code.INTERNAL_SERVER_ERROR, msg.SERVER_ERROR);
+  }
+}
 // 팔로잉/팔로워 리스트의 소유 유저(myPageEmail)
 // 이를 볼 유저(userEmail)
 export async function doGetFollow(myPageEmail: string, userEmail: string) {

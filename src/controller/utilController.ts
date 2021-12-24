@@ -9,6 +9,7 @@ import {
   doModifyUser,
   doCheckPassword,
   doModifyPassword,
+  doGetIsFollow
 } from '../service/utilService';
 
 import { modifyUserDTO } from '../interface/req/modifyUserDTO';
@@ -51,6 +52,18 @@ const follow = async function (req: Request, res: Response) {
   }
 
   const result = await doFollow(follower, followed);
+  res.status(result.status).json(result.data);
+};
+
+const getIsFollow = async function (req: Request, res: Response) {
+  const { userEmail, targetEmail } = req.query;
+
+  if (!userEmail || !targetEmail) {
+    const result = response.fail(code.BAD_REQUEST, msg.NULL_VALUE);
+    return res.status(result.status).json(result.data);
+  }
+
+  const result = await doGetIsFollow(targetEmail as string, userEmail as string);
   res.status(result.status).json(result.data);
 };
 
@@ -147,4 +160,5 @@ export default {
   modifyUser,
   checkPassword,
   modifyPassword,
+  getIsFollow
 };
