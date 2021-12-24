@@ -130,6 +130,13 @@ router.get('/myPage/new/:userEmail/save/:postId', myPageController.myPageNewMore
 router.post('/follow', utilController.follow);
 
 /**
+ *  @route GET /user/follow/check?userEmail&targetEmail
+ *  @desc 팔로잉 여부 전달
+ *  @access Public
+ */
+router.get('/follow/check', utilController.getIsFollow);
+
+/**
  *  @route GET /user/follow
  *  @desc 유저의 팔로우/팔로잉 목록 조회
  *  @access Public
