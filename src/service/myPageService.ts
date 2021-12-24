@@ -4,6 +4,7 @@ import { QueryTypes } from 'sequelize';
 import { makePreview } from './makePreview';
 
 import { myPageUser, myPageDTO } from '../interface/res/myPageDTO';
+import { write } from 'fs';
 
 export async function getLikeMyPage(userEmail: string) {
   try {
@@ -81,17 +82,19 @@ export async function getLikeMyPage(userEmail: string) {
       followerPromise,
       userPromise,
     ]).then((result) => {
+
       const writeData = makePreview(result[0]);
 
-      for (let temp of writeData.drive) {
-        temp['favoriteNum'] = result[0][0]['favoriteCount'];
-        temp['saveNum'] = result[0][0]['saveCount'];
+      for(let idx in writeData.drive){
+        writeData.drive[idx]['favoriteNum'] = result[0][idx]['favoriteCount'];
+        writeData.drive[idx]['saveNum'] = result[0][idx]['saveCount'];
       }
 
       const saveData = makePreview(result[1]);
-      for (let temp of saveData.drive) {
-        temp['favoriteNum'] = result[1][0]['favoriteCount'];
-        temp['saveNum'] = result[1][0]['saveCount'];
+
+      for(let idx in saveData.drive){
+        saveData.drive[idx]['favoriteNum'] = result[1][idx]['favoriteCount'];
+        saveData.drive[idx]['saveNum'] = result[1][idx]['saveCount'];
       }
 
       const follow = result[2][0];
