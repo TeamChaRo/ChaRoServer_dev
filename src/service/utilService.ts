@@ -4,6 +4,7 @@ import { QueryTypes, and } from 'sequelize';
 import { followDTO } from '../interface/res/followDTO';
 import { likesDTO } from '../interface/res/likesDTO';
 import { modifyUserDTO } from '../interface/req/modifyUserDTO';
+import { isFollowDTO } from '../interface/res/isFollowDTO';
 
 import s3 from '../loaders/s3';
 
@@ -89,6 +90,9 @@ export async function doSave(userEmail: string, postId: string) {
 
 export async function doFollow(follower: string, followed: string) {
   try {
+
+    let isFollow:boolean;
+
     const query = 'SELECT * FROM follow WHERE follower=:follower and followed=:followed';
     const result = await db.sequelize
       .query(query, {
@@ -101,6 +105,7 @@ export async function doFollow(follower: string, followed: string) {
       });
 
     if (result.length) {
+      isFollow = false;
       const deleteFollow = 'DELETE FROM follow WHERE follower=:follower and followed=:followed';
       db.sequelize
         .query(deleteFollow, {
@@ -112,6 +117,7 @@ export async function doFollow(follower: string, followed: string) {
           throw err;
         });
     } else {
+      isFollow = true;
       const addFollow = 'INSERT INTO follow(follower, followed) VALUES(:follower, :followed)';
       db.sequelize
         .query(addFollow, {
@@ -130,7 +136,11 @@ export async function doFollow(follower: string, followed: string) {
       sendMQ('following', pushData);
     }
 
-    return response.nsuccess(code.OK, msg.FOLLOW_SUCCESS);
+    const isFollowData: isFollowDTO = {
+      isFollow
+    }
+
+    return response.success(code.OK, msg.FOLLOW_SUCCESS, isFollowData);
   } catch (err) {
     console.log(err);
     return response.fail(code.INTERNAL_SERVER_ERROR, msg.SERVER_ERROR);
