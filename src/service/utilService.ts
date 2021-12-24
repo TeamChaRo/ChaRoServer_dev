@@ -141,14 +141,16 @@ export async function doFollow(follower: string, followed: string) {
 // 이를 볼 유저(userEmail)
 export async function doGetFollow(myPageEmail: string, userEmail: string) {
   try {
-    
-    const getFollower = `SELECT A.email, A.nickname, A.profileImage, B.follower as isFollow
-                          FROM (SELECT follow.follower, follow.followed, user.email, user.nickname, user.profileImage FROM follow INNER JOIN user WHERE follow.followed =:myPageEmail AND user.email = follow.follower) as A
-                          LEFT OUTER JOIN follow as B on(B.follower =:userEmail and B.followed = A.follower)`;
 
-    const getFollowing = `SELECT A.email, A.nickname, A.profileImage, B.followed as isFollow
+    // 팔로잉 = 내가 팔로우 한 사람들
+    const getFollowing = `SELECT A.email, A.nickname, A.profileImage, B.follower as isFollow
+                          FROM (SELECT follow.follower, follow.followed, user.email, user.nickname, user.profileImage FROM follow INNER JOIN user WHERE follow.followed =:myPageEmail AND user.email = follow.follower) as A
+                          LEFT OUTER JOIN follow as B on(B.followed =:userEmail and B.follower = A.follower)`;
+
+    // 팔로워 - 나를 팔로우 한 사람들                   
+    const getFollower = `SELECT A.email, A.nickname, A.profileImage, B.followed as isFollow
                           FROM (SELECT follow.follower, follow.followed, user.email, user.nickname, user.profileImage FROM follow INNER JOIN user WHERE follow.follower =:myPageEmail AND user.email = follow.followed) as A
-                          LEFT OUTER JOIN follow as B on(B.follower =:userEmail and B.followed = A.followed)`;
+                          LEFT OUTER JOIN follow as B on(B.followed =:userEmail and B.follower = A.follower)`;
 
     const followers = await db.sequelize
       .query(getFollower, {
