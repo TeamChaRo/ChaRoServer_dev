@@ -147,10 +147,12 @@ export async function doFollow(follower: string, followed: string) {
   }
 }
 
+// user가 target을 팔로우하는가?
+// user가 follower에 있는가?
 export async function doGetIsFollow(targetEmail: string, userEmail: string) {
   const getIsFollowing = `SELECT F.followed
                           FROM follow as F
-                          WHERE F.followed=:userEmail and F.follower=:targetEmail`;
+                          WHERE F.follower=:userEmail and F.followed=:targetEmail`;
   
   try{
 
