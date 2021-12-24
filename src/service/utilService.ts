@@ -4,6 +4,7 @@ import { QueryTypes, and } from 'sequelize';
 import { followDTO } from '../interface/res/followDTO';
 import { likesDTO } from '../interface/res/likesDTO';
 import { modifyUserDTO } from '../interface/req/modifyUserDTO';
+import { isFollowDTO } from '../interface/res/isFollowDTO';
 
 import s3 from '../loaders/s3';
 
@@ -89,6 +90,9 @@ export async function doSave(userEmail: string, postId: string) {
 
 export async function doFollow(follower: string, followed: string) {
   try {
+
+    let isFollow:boolean;
+
     const query = 'SELECT * FROM follow WHERE follower=:follower and followed=:followed';
     const result = await db.sequelize
       .query(query, {
@@ -101,6 +105,7 @@ export async function doFollow(follower: string, followed: string) {
       });
 
     if (result.length) {
+      isFollow = false;
       const deleteFollow = 'DELETE FROM follow WHERE follower=:follower and followed=:followed';
       db.sequelize
         .query(deleteFollow, {
@@ -112,6 +117,7 @@ export async function doFollow(follower: string, followed: string) {
           throw err;
         });
     } else {
+      isFollow = true;
       const addFollow = 'INSERT INTO follow(follower, followed) VALUES(:follower, :followed)';
       db.sequelize
         .query(addFollow, {
@@ -130,7 +136,11 @@ export async function doFollow(follower: string, followed: string) {
       sendMQ('following', pushData);
     }
 
-    return response.nsuccess(code.OK, msg.FOLLOW_SUCCESS);
+    const isFollowData: isFollowDTO = {
+      isFollow
+    }
+
+    return response.success(code.OK, msg.FOLLOW_SUCCESS, isFollowData);
   } catch (err) {
     console.log(err);
     return response.fail(code.INTERNAL_SERVER_ERROR, msg.SERVER_ERROR);
@@ -141,14 +151,16 @@ export async function doFollow(follower: string, followed: string) {
 // 이를 볼 유저(userEmail)
 export async function doGetFollow(myPageEmail: string, userEmail: string) {
   try {
-    
-    const getFollower = `SELECT A.email, A.nickname, A.profileImage, B.follower as isFollow
-                          FROM (SELECT follow.follower, follow.followed, user.email, user.nickname, user.profileImage FROM follow INNER JOIN user WHERE follow.followed =:myPageEmail AND user.email = follow.follower) as A
-                          LEFT OUTER JOIN follow as B on(B.follower =:userEmail and B.followed = A.follower)`;
 
-    const getFollowing = `SELECT A.email, A.nickname, A.profileImage, B.followed as isFollow
+    // 팔로잉 = 내가 팔로우 한 사람들
+    const getFollowing = `SELECT A.email, A.nickname, A.profileImage, B.follower as isFollow
+                          FROM (SELECT follow.follower, follow.followed, user.email, user.nickname, user.profileImage FROM follow INNER JOIN user WHERE follow.followed =:myPageEmail AND user.email = follow.follower) as A
+                          LEFT OUTER JOIN follow as B on(B.followed =:userEmail and B.follower = A.follower)`;
+
+    // 팔로워 - 나를 팔로우 한 사람들                   
+    const getFollower = `SELECT A.email, A.nickname, A.profileImage, B.followed as isFollow
                           FROM (SELECT follow.follower, follow.followed, user.email, user.nickname, user.profileImage FROM follow INNER JOIN user WHERE follow.follower =:myPageEmail AND user.email = follow.followed) as A
-                          LEFT OUTER JOIN follow as B on(B.follower =:userEmail and B.followed = A.followed)`;
+                          LEFT OUTER JOIN follow as B on(B.followed =:userEmail and B.follower = A.follower)`;
 
     const followers = await db.sequelize
       .query(getFollower, {
