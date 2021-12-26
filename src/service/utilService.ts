@@ -262,12 +262,12 @@ export async function doGetLikes(userEmail: string, postId: string) {
     const getLikes = `SELECT user.email, user.nickname, user.profileImage, B.follower as isFollow
           FROM likedPost as A INNER JOIN user
           LEFT OUTER JOIN follow as B on(B.followed = user.email and B.follower = :userEmail)
-          WHERE A.PreviewId = 1 and A.UserEmail = user.email`;
+          WHERE A.PreviewId = :postId and A.UserEmail = user.email`;
 
     const likes = await db.sequelize
       .query(getLikes, {
         type: QueryTypes.SELECT,
-        replacements: { userEmail: userEmail },
+        replacements: { postId ,userEmail },
         nest: true,
         raw: true,
       })
