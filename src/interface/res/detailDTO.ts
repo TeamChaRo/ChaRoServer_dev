@@ -17,6 +17,7 @@ export interface detailDTO {
 
   //user 정보
   author: string;
+  authorEmail: string;
   isAuthor: boolean;
   profileImage: string;
 
