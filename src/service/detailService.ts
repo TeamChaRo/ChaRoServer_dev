@@ -11,7 +11,7 @@ import code from '../constants/statusCode';
 
 export async function getDetail(userEmail: string, postId: string) {
   try {
-    const query = `SELECT P.*, user.nickname, user.profileImage, 
+    const query = `SELECT P.*, user.nickname, user.profileImage, user.email,
                     count(isSave.PreviewId) as isStored, count(countLike.PreviewId) as favoriteCount, count(isLike.PreviewId) as isFavorite
                     FROM detail as P
                     INNER JOIN user
@@ -39,6 +39,7 @@ export async function getDetail(userEmail: string, postId: string) {
       warnings: parseWarning(data),
 
       author: data['nickname'],
+      authorEmail: data['email'],
       isAuthor: data['UserEmail'] == userEmail ? true : false,
       profileImage: data['profileImage'],
 
