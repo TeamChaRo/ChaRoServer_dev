@@ -49,11 +49,12 @@ export async function getLikeMyPage(userEmail: string) {
       raw: true,
       nest: true,
     });
-
+    
+    //팔로잉 - 내가 팔로우한다
     const followingQuery = `SELECT count(A.follower) AS following, user.nickname AS nickname, user.profileImage AS profileImage
                                 FROM user 
                                 INNER JOIN follow AS A 
-                                WHERE user.email= :userEmail AND user.email = A.followed`;
+                                WHERE user.email= :userEmail AND user.email = A.follower`;
     const followPromise = db.sequelize.query(followingQuery, {
       replacements: { userEmail: userEmail },
       type: QueryTypes.SELECT,
@@ -64,7 +65,7 @@ export async function getLikeMyPage(userEmail: string) {
     const followerQuery = `SELECT count(B.followed) AS follower
                                 FROM user 
                                 INNER JOIN follow AS B
-                                WHERE user.email= :userEmail AND user.email = B.follower`;
+                                WHERE user.email= :userEmail AND user.email = B.followed`;
     const followerPromise = db.sequelize.query(followerQuery, {
       replacements: { userEmail: userEmail },
       type: QueryTypes.SELECT,
@@ -97,13 +98,13 @@ export async function getLikeMyPage(userEmail: string) {
       }
 
       const follow = result[2][0];
-      const follwer = result[3][0];
+      const follower = result[3][0];
       const user = result[4][0];
       const userInfo: myPageUser = {
         nickname: user['nickname'],
         profileImage: user['profileImage'],
-        following: follwer['follower'],
-        follower: follow['following'],
+        following: follow['following'],
+        follower: follower['follower'],
       };
 
       myPage = {
@@ -272,7 +273,7 @@ export async function getNewMyPage(userEmail: string) {
     const followingQuery = `SELECT count(A.follower) AS following, user.nickname AS nickname, user.profileImage AS profileImage
                                 FROM user 
                                 INNER JOIN follow AS A 
-                                WHERE user.email= :userEmail AND user.email = A.followed`;
+                                WHERE user.email= :userEmail AND user.email = A.follower`;
     const followPromise = db.sequelize.query(followingQuery, {
       replacements: { userEmail: userEmail },
       type: QueryTypes.SELECT,
@@ -283,7 +284,7 @@ export async function getNewMyPage(userEmail: string) {
     const followerQuery = `SELECT count(B.followed) AS follower
                                 FROM user 
                                 INNER JOIN follow AS B
-                                WHERE user.email= :userEmail AND user.email = B.follower`;
+                                WHERE user.email= :userEmail AND user.email = B.followed`;
     const followerPromise = db.sequelize.query(followerQuery, {
       replacements: { userEmail: userEmail },
       type: QueryTypes.SELECT,
@@ -316,13 +317,13 @@ export async function getNewMyPage(userEmail: string) {
       // 팔로워 - 나를 팔로우 하는 사람들
       // 팔로잉 - 내가 팔로우 하는 것
       const follow = result[2][0];
-      const follwer = result[3][0];
+      const follower = result[3][0];
       const user = result[4][0];
       const userInfo: myPageUser = {
         nickname: user['nickname'],
         profileImage: user['profileImage'],
-        following: follwer['follower'],
-        follower: follow['following'],
+        following: follow['following'],
+        follower: follower['follower'],
       };
 
       myPage = {
