@@ -20,7 +20,8 @@ const normalLogin = async function (email: string, password: string) {
       return response.fail(code.NOT_FOUND, msg.NO_USER);
     }
 
-    if (user.password == password) {
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (isMatch) {
       const data: loginDTO = {
         email: user.email,
         nickname: user.nickname,
@@ -31,50 +32,7 @@ const normalLogin = async function (email: string, password: string) {
     } else {
       return response.fail(code.NOT_FOUND, msg.LOGIN_FAIL);
     }
-    /*
-    //Encrpyt password
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return {
-        status: 404,
-        data: {
-          success: false,
-          msg: '비밀번호가 없습니다.',
-        },
-      };
-    }
     
-    // Return jsonwebtoken
-    const payload = {
-      user: {
-        id: user.Id,
-      },
-    };
-
-    function token() {
-      return new Promise((resolve, reject) => {
-        jwt.sign(payload, config.jwtSecret, { expiresIn: 36000 }, (err, token) => {
-          if (err) throw err;
-          else resolve(token);
-        });
-      });
-    }
-    
-
-    return {
-      status: 200,
-      data: {
-        success: true,
-        msg: '로그인에 성공하였습니다.',
-        data: {
-          userId: user.Id,
-          nickname: user.nickname,
-          token: await token(),
-          profileImage: user.profileImage,
-        },
-      },
-    };
-    */
   } catch (err) {
     console.log(err);
     return response.fail(code.INTERNAL_SERVER_ERROR, msg.SERVER_ERROR);

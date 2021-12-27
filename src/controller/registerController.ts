@@ -20,8 +20,7 @@ const register = async function (req: Request, res: Response) {
   }
 
   const { userEmail, password, nickname, pushAgree, emailAgree } = req.body;
-
-  if (!userEmail || !password || !nickname || !pushAgree || !emailAgree) {
+  if (!userEmail || !password || !nickname || pushAgree == null || emailAgree== null) {
     const result = response.fail(code.BAD_REQUEST, msg.NULL_VALUE);
     return res.status(result.status).json(result.data);
   }
