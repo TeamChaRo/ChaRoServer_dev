@@ -13,7 +13,7 @@ const deletePost = async (req: Request, res: Response) => {
   const { postId } = req.params;
   const { images } = req.body;
 
-  if (!postId || !images) {
+  if (!postId) {
     const result = response.fail(code.BAD_REQUEST, msg.NULL_VALUE);
     return res.status(result.status).json(result.data);
   }

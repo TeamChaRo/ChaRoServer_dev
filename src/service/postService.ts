@@ -27,7 +27,7 @@ function deleteImages(images: string[]) {
 }
 export async function doDelete(postId: string, images: string[]) {
   try {
-    deleteImages(images);
+    if(images) deleteImages(images);
     db.Preview.destroy({ where: { Id: postId } });
   } catch (err) {
     console.log(err);
